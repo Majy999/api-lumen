@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\Tools;
 use Exception;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -45,6 +47,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        // return parent::render($request, $e);
         return parent::render($request, $e);
+    }
+
+    /**
+     * 全局异常处理
+     * @param $request
+     * @param Exception $exception
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @author huangjinbing <373768442@qq.com>
+     */
+    public function handle($request, Exception $exception)
+    {
+        Tools::logUnusualError($exception);
+
+        if ($exception instanceof ValidationException) {
+            // 表单验证沿用原有的
+            return parent::render($request, $exception);
+        } else if ($exception instanceof RequestException) {
+            // 接口传参缺少
+            return response()->json(Tools::error($exception->getMessage()));
+        } else {
+            // 接口报错
+            return response()->json(Tools::error('系统异常'));
+        }
     }
 }
