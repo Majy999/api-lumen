@@ -14,3 +14,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'test'], function () use ($router) {
+    $router->get('test', function () {
+        return 'test';
+    });
+});
+
+$router->get('get', ['as' => 'get', 'uses' => 'ApiController@get']);
