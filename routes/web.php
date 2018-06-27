@@ -15,10 +15,16 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// 测试路由
 $router->group(['prefix' => 'test'], function () use ($router) {
     $router->get('test', function () {
         return 'test';
     });
+
+    $router->get('mysql-get', ['as' => 'mysql-get', 'uses' => 'TestController@mysqlGet']);
+    $router->get('mysql-test', ['as' => 'mysql-test', 'uses' => 'TestController@mysql']);
+    $router->get('redis-test', ['as' => 'redis-test', 'uses' => 'TestController@redis']);
 });
 
-$router->get('get', ['as' => 'get', 'uses' => 'ApiController@get']);
+// 获取企业号应用详情
+$router->get('agent-detail', ['as' => 'agent-detail', 'uses' => 'WorkController@getAgentDetail']);
