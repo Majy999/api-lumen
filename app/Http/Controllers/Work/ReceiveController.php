@@ -13,6 +13,7 @@ class ReceiveController extends Controller
         $input = file_get_contents('php://input');
         Tools::logInfo('数据回调URL');
         Tools::logInfo($input);
+        return true;
     }
 
     // 指令回调URL
@@ -21,6 +22,7 @@ class ReceiveController extends Controller
         $input = file_get_contents('php://input');
         Tools::logInfo('指令回调URL');
         Tools::logInfo($input);
+        return true;
     }
 
 }
