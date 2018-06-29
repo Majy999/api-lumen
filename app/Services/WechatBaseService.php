@@ -15,7 +15,8 @@ class WechatBaseService
     {
         $options = [
             'corp_id' => 'ww8254a365bf92e5aa',
-            'secret' => 'tkXAmtbl1bfMlFTeV3WQDgBQ_fauKOUt9SskWB5wrHk',
+            'agent_id' => 1000014,
+            'secret' => 'vPpXjQWZnIjXR4jp7QH3_s-2rKcXMjVtOT91k325MXs',
         ];
 
         $options = (object)$options;

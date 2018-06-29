@@ -16,6 +16,7 @@ class WeChatService extends WechatBaseService
 
         $this->options = [
             'corp_id' => $option->corp_id,
+            'agent_id' => $option->agent_id,
             'secret' => $option->secret,
             'guzzle' => [
                 'verify' => false,
