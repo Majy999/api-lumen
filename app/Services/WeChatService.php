@@ -77,8 +77,6 @@ class WeChatService extends WechatBaseService
      */
     public function callback()
     {
-        $response = $this->workProgram->server->serve();
 
-        return $response->send();
     }
 }
