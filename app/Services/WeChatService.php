@@ -66,4 +66,19 @@ class WeChatService extends WechatBaseService
         $agentDetail = $this->workProgram->agent->get($agentId); // 只能传配置文件中的 id，API 改动所致
         return $agentDetail;
     }
+
+    /**
+     * callback
+     *
+     * @author Majy999 <Majy999@outlook.com>
+     * @date xxx
+     * @since PM_mock_data
+     * @return mixed|void
+     */
+    public function callback()
+    {
+        $response = $this->workProgram->server->serve();
+
+        return $response->send();
+    }
 }
