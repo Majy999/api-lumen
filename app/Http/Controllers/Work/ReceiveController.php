@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Work;
 
 use App\Helpers\Tools;
 use App\Http\Controllers\Controller;
+use App\Services\WeChatService;
 use Extend\WorkWechat\Server\WXBizMsgCrypt;
 
 class ReceiveController extends Controller
@@ -56,6 +57,13 @@ class ReceiveController extends Controller
         Tools::logInfo('指令回调URL');
         Tools::logInfo($input);
         return true;
+    }
+
+    public function getAccessToken()
+    {
+        $weChatService = new WeChatService();
+        $accessToken = $weChatService->getAccessToken();
+        echo $accessToken;
     }
 
 }

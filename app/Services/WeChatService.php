@@ -9,7 +9,7 @@ class WeChatService extends WechatBaseService
     protected $options;
     protected $workProgram;
 
-    public function __construct($weixin = 'corp-jike')
+    public function __construct($weixin = 'wotk-zantui')
     {
         $cacheDriver = $this->wechatCache();
         $option = $this->getWeChatOptions($weixin);
