@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Work;
 
+use App\Helpers\HttpUtils;
 use App\Helpers\Tools;
 use App\Http\Controllers\Controller;
 use App\Services\WeChatService;
@@ -16,9 +17,12 @@ class ReceiveController extends Controller
         // 企业号在公众平台上设置的参数如下
         $corpId = "ww8254a365bf92e5aa";
 
-        $suiteId = [
+        // 第三方应用配置
+        $suiteIds = [
+            // 赞推
             'ww85afb6954f398bde' => [
-                'suiteid' => 'ww85afb6954f398bde',
+                'suite_id' => 'ww85afb6954f398bde',
+                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
                 'suite_token' => 'FRLiucjHsmi8t9',
                 'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
             ],
@@ -33,7 +37,7 @@ class ReceiveController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($echostr)) {
 
             $sEchoStr = "";
-            foreach ($suiteId as $k => $v) {
+            foreach ($suiteIds as $k => $v) {
                 $wxcpt = new WXBizMsgCrypt($v['suite_token'], $v['suite_encoding_aes_key'], $corpId);
                 $errCode = $wxcpt->VerifyURL($msgSignature, $timestamp, $nonce, $echostr, $sEchoStr);//VerifyURL方法的最后一个参数是带取地址的,
 
@@ -46,8 +50,7 @@ class ReceiveController extends Controller
                     exit;
                 }
             }
-        }
-        // 如果是微信推送消息
+        } // 如果是微信推送消息
         else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // post请求的密文数据
             $sReqData = file_get_contents("php://input");
@@ -59,8 +62,8 @@ class ReceiveController extends Controller
 
             // 存储当前推送回调这个套件的信息, 用来实例化
             $sassInfo = [];
-            foreach ($suiteId as $k => $v) {
-                if ($v['suiteid'] == $ToUserName) {
+            foreach ($suiteIds as $k => $v) {
+                if ($v['suite_id'] == $ToUserName) {
                     $sassInfo = $v;
                     $ToUserNameType = 'sutieid';
                     break;
@@ -93,11 +96,10 @@ class ReceiveController extends Controller
         else if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty(request('auth_code'))) {
             $authCode = request('auth_code');
             $state = request('state');
-            // 解密$state获得suiteid, 在授权请求的state参数, 把suiteid加密了
-            // todo
-            $suiteId = '';
+            // 解密$state获得suiteid, 在授权请求的state参数, 把suite_id传递过去
+            $suiteId = $state;
             $time = time();
-            $sMsg      = <<<EOD
+            $sMsg = <<<EOD
 <xml>
   <SuiteId><![CDATA[$suiteId]]></SuiteId>
   <AuthCode><![CDATA[$authCode]]></AuthCode>
@@ -123,39 +125,47 @@ EOD;
         $infoType = $xml->getElementsByTagName('InfoType')->item(0)->nodeValue;
         $echoStr = 'success';
         switch ($infoType) {
-            case 'suite_ticket'://推送suite_ticket协议每十分钟微信推送一次
+            // 推送suite_ticket协议每十分钟微信推送一次
+            case 'suite_ticket':
                 $suiteTicket = $xml->getElementsByTagName('SuiteTicket')->item(0)->nodeValue;
 
                 if (!empty($suiteTicket)) {
                     Tools::logInfo($suiteTicket);
                     Redis::set('suite_ticket', $suiteTicket);
                 } else {
-                    //错误信息
+                    // 错误信息
                 }
                 break;
 
             // 变更授权的通知 需要调用 获取企业号的授权信息, 更改企业号授权信息
             case 'change_auth':
-                //普通企业的corpid
+                // 普通企业的corpid
                 $authCorpId = $xml->getElementsByTagName('AuthCorpId')->item(0)->nodeValue;
 
                 break;
 
             // 取消授权的通知 -- 特指套件取消授权
             case 'cancel_auth':
-                //普通企业的corpid
+                // 普通企业的corpid
                 $authCorpId = $xml->getElementsByTagName('AuthCorpId')->item(0)->nodeValue;
 
                 break;
 
             // 授权成功推送auth_code事件
             case 'create_auth':
-                //获取AuthCode
+                // 获取AuthCode
                 $authCode = $xml->getElementsByTagName('AuthCode')->item(0)->nodeValue;
                 if (!empty($authCode)) {
 
-                    //服务商辅助授权方式安装应用
+                    // 服务商辅助授权方式安装应用
                     if ('online' !== $type && 'server' === $type) {
+                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code");
+                        $args = [
+                            'auth_code' => $authCode,
+                        ];
+                        $json = HttpUtils::HttpPostParseToJson($url, $args);
+                        Redis::set('access_token_' . $suiteId, json_encode($json));
+                        Tools::logInfo("获取企业永久授权码成功");
 
                     } //线上自助授权安装应用
                     else if ('online' == $type) {
@@ -191,7 +201,6 @@ EOD;
         );
     }
 
-
     /**
      * 获取accessToken
      *
@@ -202,6 +211,72 @@ EOD;
         $weChatService = new WeChatService();
         $accessToken = $weChatService->getAccessToken();
         echo $accessToken;
+    }
+
+    /**
+     * 获取第三方应用凭证 suite_access_token
+     *
+     * @author Majy999 <Majy999@outlook.com>
+     * @date 2018/7/2 15:15
+     */
+    public function getSuiteAccessToken($suiteId = 'ww85afb6954f398bde')
+    {
+        // 企业号在公众平台上设置的参数如下
+        $corpId = "ww8254a365bf92e5aa";
+
+        // 第三方应用配置
+        $suiteIds = [
+            // 赞推
+            'ww85afb6954f398bde' => [
+                'suite_id' => 'ww85afb6954f398bde',
+                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
+                'suite_token' => 'FRLiucjHsmi8t9',
+                'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
+            ],
+        ];
+
+        // 获取配置信息
+        $suiteId = $suiteIds[$suiteId];
+
+        // 获取Redis中存储的 suite_ticket
+        $suiteTicket = Redis::get('suite_ticket');
+
+        $args = [
+            'suite_id' => $suiteId['suite_id'],
+            'suite_secret' => $suiteId['suite_secret'],
+            'suite_ticket' => $suiteTicket,
+        ];
+
+        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_suite_token");
+        $json = HttpUtils::httpPostParseToJson($url, $args);
+
+        if (isset($json['suite_access_token'])) {
+            Redis::set('suite_access_token', $json['suite_access_token']);
+            Redis::expire('suite_access_token', 7000);
+            return Tools::setData($json);
+        } else {
+            return Tools::error('获取不到 suite_access_token');
+        }
+    }
+
+    // 获取预授权码
+    public function getPreAuthCode()
+    {
+        // 获取第三方应用凭证
+        $suiteAccessToken = Redis::get('suite_access_token');
+        if (!empty($suiteAccessToken)) {
+            $url = HttpUtils::MakeUrl("/cgi-bin/service/get_pre_auth_code?suite_access_token=" . $suiteAccessToken);
+            $json = HttpUtils::httpGetParseToJson($url);
+            if (isset($json['pre_auth_code'])) {
+                Redis::set('pre_auth_code', $json['pre_auth_code']);
+                Redis::expire('pre_auth_code', $json['expires_in']);
+                return Tools::setData($json);
+            } else {
+                return Tools::error('获取预授权码pre_auth_code失败');
+            }
+        } else {
+            return Tools::error('获取第三方应用凭证不能为空');
+        }
     }
 
 

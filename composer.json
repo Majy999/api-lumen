@@ -25,7 +25,8 @@
             "Extend\\": "extend/"
         },
         "files": [
-            "app/Helpers/helper_functions.php"
+            "app/Helpers/helper_functions.php",
+            "app/Helpers/HttpUtils.php"
         ]
     },
     "autoload-dev": {
