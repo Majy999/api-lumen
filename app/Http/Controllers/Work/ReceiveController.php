@@ -57,7 +57,7 @@ class ReceiveController extends Controller
 
             $sassInfo = array();//存储当前推送回调这个套件的信息, 用来实例化
             foreach ($suiteId as $k => $v) {
-                if ($v['suite_id'] == $ToUserName) {
+                if ($v['suiteid'] == $ToUserName) {
                     $sassInfo = $v;
                     $ToUserNameType = 'sutieid';
                     break;
