@@ -33,8 +33,8 @@ $router->get('agent-detail', ['as' => 'agent-detail', 'uses' => 'WorkController@
 $router->group(['prefix' => 'receive'], function () use ($router) {
 
     // 数据回调URL
-    $router->get('data-receive', ['as' => 'data-receive', 'uses' => 'Work\ReceiveController@dataReceive']);
+    $router->any('data-receive', ['as' => 'data-receive', 'uses' => 'Work\ReceiveController@dataReceive']);
 
     // 指令回调URL
-    $router->get('handle-receive', ['as' => 'handle-receive', 'uses' => 'Work\ReceiveController@handleReceive']);
+    $router->any('handle-receive', ['as' => 'handle-receive', 'uses' => 'Work\ReceiveController@handleReceive']);
 });

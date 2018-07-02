@@ -72,7 +72,6 @@ class ReceiveController extends Controller
             }
 
             $wxcpt = new WXBizMsgCrypt($sassInfo['suite_token'], $sassInfo['suite_encoding_aes_key'], $ToUserName);
-            $errCode = -1;
             $sMsg = "";  // 解析之后的明文
             $errCode = $wxcpt->DecryptMsg($msgSignature, $timestamp, $nonce, $sReqData, $sMsg);//VerifyURL方法的最后一个参数是带取地址的,
             if ($errCode == 0) {
