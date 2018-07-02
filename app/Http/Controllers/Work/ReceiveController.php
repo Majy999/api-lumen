@@ -43,6 +43,15 @@ class ReceiveController extends Controller
 
         $wxcpt = new WXBizMsgCrypt($token, $encodingAesKey, $corpId);
         $errCode = $wxcpt->VerifyURL($sVerifyMsgSig, $sVerifyTimeStamp, $sVerifyNonce, $sVerifyEchoStr, $sEchoStr);
+
+        // 保存返回信息
+        $rawPostData = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $input = file_get_contents('php://input');
+
+        Tools::logInfo('保存返回信息');
+        Tools::logInfo($rawPostData);
+        Tools::logInfo($input);
+
         if ($errCode == 0) {
             echo($sEchoStr);
         } else {
