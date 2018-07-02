@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Helpers\Tools;
 use EasyWeChat\Factory;
+use Illuminate\Support\Facades\Redis;
 
 class WeChatService extends WechatBaseService
 {
@@ -16,7 +18,7 @@ class WeChatService extends WechatBaseService
 
         $this->options = [
             'corp_id' => $option->corp_id,
-//            'agent_id' => $option->agent_id,
+            'agent_id' => $option->agent_id,
             'secret' => $option->secret,
             'guzzle' => [
                 'verify' => false,
@@ -45,12 +47,11 @@ class WeChatService extends WechatBaseService
     }
 
     /**
-     * 获取小程序 access_token
+     * 获取企业号 access_token
      */
     public function getAccessToken()
     {
         $accessToken = $this->workProgram->access_token->getToken();
-        dd($accessToken);
         return $accessToken;
     }
 
@@ -68,16 +69,5 @@ class WeChatService extends WechatBaseService
         return $agentDetail;
     }
 
-    /**
-     * callback
-     *
-     * @author Majy999 <Majy999@outlook.com>
-     * @date xxx
-     * @since PM_mock_data
-     * @return mixed|void
-     */
-    public function callback()
-    {
 
-    }
 }
