@@ -255,6 +255,7 @@ EOD;
             Redis::expire('suite_access_token', 7000);
             return Tools::setData($json);
         } else {
+            Tools::logError(json_encode($json));
             return Tools::error('获取不到 suite_access_token');
         }
     }
@@ -272,6 +273,7 @@ EOD;
                 Redis::expire('pre_auth_code', $json['expires_in']);
                 return Tools::setData($json);
             } else {
+                Tools::logError(json_encode($json));
                 return Tools::error('获取预授权码pre_auth_code失败');
             }
         } else {
