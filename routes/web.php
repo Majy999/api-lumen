@@ -26,9 +26,6 @@ $router->group(['prefix' => 'test'], function () use ($router) {
     $router->get('redis-test', ['as' => 'redis-test', 'uses' => 'TestController@redis']);
 });
 
-// 获取企业号应用详情
-$router->get('agent-detail', ['as' => 'agent-detail', 'uses' => 'WorkController@getAgentDetail']);
-
 // 回调地址
 $router->group(['prefix' => 'receive'], function () use ($router) {
 
