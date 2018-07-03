@@ -91,7 +91,7 @@ class ReceiveController extends Controller
                 $ToUserNameType = 'corpid';
             }
 
-            $wxcpt = new WXBizMsgCrypt($sassInfo['suite_token'], $sassInfo['suite_encoding_aes_key'], $ToUserName);
+            $wxcpt = new WXBizMsgCrypt($sassInfo['suite_token'] ?? '', $sassInfo['suite_encoding_aes_key'] ?? '', $ToUserName);
             // 解析之后的明文
             $sMsg = '';
             // VerifyURL方法的最后一个参数是带取地址的
