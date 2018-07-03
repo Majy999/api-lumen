@@ -42,4 +42,7 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
 
     // 获取预授权码 pre_auth_code
     $router->get('get-pre-auth-code', ['as' => 'get-pre-auth-code', 'uses' => 'Work\ReceiveController@getPreAuthCode']);
+
+    // 设置授权配置 测试
+    $router->get('make-test', ['as' => 'make-test', 'uses' => 'Work\ReceiveController@makeTest']);
 });

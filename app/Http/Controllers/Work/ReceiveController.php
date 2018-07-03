@@ -287,5 +287,29 @@ EOD;
         }
     }
 
+    // 测试授权
+    public function makeTest()
+    {
+        $suiteId = request('suite_id', 'ww85afb6954f398bde');
+        $preAuthCode = Redis::get('pre_auth_code'. $suiteId);
+        $suiteAccessToken = Redis::get('suite_access_token'. $suiteId);
+        $authType = request('auth_type', 0);
+
+        if (!empty($preAuthCode)) {
+            $args = [
+                'pre_auth_code' => $preAuthCode,
+                'session_info' => [
+                    'auth_type' => $authType,
+                ]
+            ];
+
+            $url = HttpUtils::MakeUrl("/cgi-bin/service/set_session_info?suite_access_token=" . $suiteAccessToken);
+            $json = HttpUtils::httpPostParseToJson($url, $args);
+            return Tools::setData($json);
+        } else {
+            return Tools::error('pre_auth_code为空');
+        }
+    }
+
 
 }
