@@ -44,6 +44,7 @@ class MessageController extends Controller
         $corpId = request('corp_id', 'ww8254a365bf92e5aa');
         $suiteId = request('suite_id', 'ww85afb6954f398bde');
         $permanentCode = Redis::get('permanent_code_suite_id:' . $suiteId . ':corp_id:' . $corpId);
+        if (!empty($permanentCode)) $permanentCode = json_decode($permanentCode, 1);
         return Tools::setData($permanentCode);
     }
 }
