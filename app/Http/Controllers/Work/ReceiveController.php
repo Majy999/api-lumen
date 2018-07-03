@@ -59,8 +59,7 @@ class ReceiveController extends Controller
                     echo $sEchoStr;
                     exit;
                 } else {
-                    // print("ERR: " . $errCode . "\n\n");
-                    // exit;
+                    Tools::logError($errCode);
                 }
             }
         } // 如果是微信推送消息
