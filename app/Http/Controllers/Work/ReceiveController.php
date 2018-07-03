@@ -138,7 +138,6 @@ EOD;
         $xml = new \DOMDocument();
         $xml->loadXML($sMsg);
         $suiteId = $xml->getElementsByTagName('SuiteId')->item(0)->nodeValue;
-        $corpId = $xml->getElementsByTagName('CorpId')->item(0)->nodeValue;
         $infoType = $xml->getElementsByTagName('InfoType')->item(0)->nodeValue;
         $echoStr = 'success';
         switch ($infoType) {
@@ -173,6 +172,7 @@ EOD;
             case 'create_auth':
                 // 获取AuthCode
                 $authCode = $xml->getElementsByTagName('AuthCode')->item(0)->nodeValue;
+                $corpId = $xml->getElementsByTagName('CorpId')->item(0)->nodeValue;
                 if (!empty($authCode)) {
 
                     // 服务商辅助授权方式安装应用
