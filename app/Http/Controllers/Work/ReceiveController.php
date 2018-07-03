@@ -173,7 +173,9 @@ EOD;
 
                     // 服务商辅助授权方式安装应用
                     if ('online' !== $type && 'server' === $type) {
-                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code");
+
+                        $suiteAccessToken = Redis::get('suite_access_token' . $suiteId);
+                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
                         ];
