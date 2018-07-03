@@ -180,6 +180,7 @@ EOD;
                             'auth_code' => $authCode,
                         ];
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
+                        Tools::logInfo(print_r($json, 1));
                         Redis::set('permanent_code_' . $suiteId, json_encode($json));
                         Tools::logInfo("获取企业永久授权码成功");
 
