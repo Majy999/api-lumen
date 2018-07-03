@@ -145,7 +145,7 @@ EOD;
 
                 if (!empty($suiteTicket)) {
                     Tools::logInfo($suiteTicket);
-                    Redis::set('suite_ticket' . $suiteId, $suiteTicket);
+                    Redis::set('suite_ticket_' . $suiteId, $suiteTicket);
                 } else {
                     // 错误信息
                 }
@@ -174,13 +174,13 @@ EOD;
                     // 服务商辅助授权方式安装应用
                     if ('online' !== $type && 'server' === $type) {
 
-                        $suiteAccessToken = Redis::get('suite_access_token' . $suiteId);
+                        $suiteAccessToken = Redis::get('suite_access_token_' . $suiteId);
                         $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
                         ];
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
-                        Redis::set('access_token_' . $suiteId, json_encode($json));
+                        Redis::set('permanent_code_' . $suiteId, $json);
                         Tools::logInfo("获取企业永久授权码成功");
 
                     } //线上自助授权安装应用
@@ -243,7 +243,7 @@ EOD;
         $suiteconfig = $this->suiteIds[$suiteId];
 
         // 获取Redis中存储的 suite_ticket
-        $suiteTicket = Redis::get('suite_ticket' . $suiteId);
+        $suiteTicket = Redis::get('suite_ticket_' . $suiteId);
 
         $args = [
             'suite_id' => $suiteconfig['suite_id'],
@@ -255,8 +255,8 @@ EOD;
         $json = HttpUtils::httpPostParseToJson($url, $args);
 
         if (isset($json['suite_access_token'])) {
-            Redis::set('suite_access_token' . $suiteId, $json['suite_access_token']);
-            Redis::expire('suite_access_token' . $suiteId, 7000);
+            Redis::set('suite_access_token_' . $suiteId, $json['suite_access_token']);
+            Redis::expire('suite_access_token_' . $suiteId, 7000);
             return Tools::setData($json);
         } else {
             Tools::logError(json_encode($json));
@@ -270,13 +270,13 @@ EOD;
         $suiteId = request('suite_id', 'ww85afb6954f398bde');
 
         // 获取第三方应用凭证
-        $suiteAccessToken = Redis::get('suite_access_token' . $suiteId);
+        $suiteAccessToken = Redis::get('suite_access_token_' . $suiteId);
         if (!empty($suiteAccessToken)) {
             $url = HttpUtils::MakeUrl("/cgi-bin/service/get_pre_auth_code?suite_access_token=" . $suiteAccessToken);
             $json = HttpUtils::httpGetParseToJson($url);
             if (isset($json['pre_auth_code'])) {
-                Redis::set('pre_auth_code' . $suiteId, $json['pre_auth_code']);
-                Redis::expire('pre_auth_code' . $suiteId, $json['expires_in']);
+                Redis::set('pre_auth_code_' . $suiteId, $json['pre_auth_code']);
+                Redis::expire('pre_auth_code_' . $suiteId, $json['expires_in']);
                 return Tools::setData($json);
             } else {
                 Tools::logError(json_encode($json));
@@ -288,11 +288,12 @@ EOD;
     }
 
     // 测试授权
+    // todo,正式上线之前，要记得改回非开发模式
     public function makeTest()
     {
         $suiteId = request('suite_id', 'ww85afb6954f398bde');
-        $preAuthCode = Redis::get('pre_auth_code'. $suiteId);
-        $suiteAccessToken = Redis::get('suite_access_token'. $suiteId);
+        $preAuthCode = Redis::get('pre_auth_code_'. $suiteId);
+        $suiteAccessToken = Redis::get('suite_access_token_'. $suiteId);
         $authType = request('auth_type', 0);
 
         if (!empty($preAuthCode)) {
