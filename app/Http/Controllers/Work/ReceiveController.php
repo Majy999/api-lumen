@@ -34,6 +34,13 @@ class ReceiveController extends Controller
                 'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
                 'suite_token' => 'FRLiucjHsmi8t9',
                 'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
+            ],
+            // 赞推
+            'ww80c31779e77cc4ba' => [
+                'suite_id' => 'ww80c31779e77cc4ba',
+                'suite_secret' => '5mNhxuf52q0QBxGs6ICLm8gvnvDW_SddjoD0d1Bg2Cw',
+                'suite_token' => 'nmkD3T',
+                'suite_encoding_aes_key' => 'QYWkluhAfed1FrW6TGTYTK5H7Bn5CzJ7ti6Rqw5DKsk',
             ]
         ];
     }
@@ -109,7 +116,7 @@ class ReceiveController extends Controller
         else if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty(request('auth_code'))) {
             $authCode = request('auth_code');
             $state = request('state');
-            $state = explode(",",$state);
+            $state = explode(",", $state);
             // state格式[$suiteId,$corpId]
             $suiteId = $state[0] ?? '';
             $corpId = $state[1] ?? '';
