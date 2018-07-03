@@ -21,13 +21,6 @@ class ReceiveController extends Controller
 
         // 第三方应用配置
         $this->suiteIds = [
-            // 赞推
-            'ww85afb6954f398bde' => [
-                'suite_id' => 'ww85afb6954f398bde',
-                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
-                'suite_token' => 'FRLiucjHsmi8t9',
-                'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
-            ],
             // 测试应用
             'ww65ff1d66710fd8c5' => [
                 'suite_id' => 'ww65ff1d66710fd8c5',
@@ -35,6 +28,13 @@ class ReceiveController extends Controller
                 'suite_token' => 'MUtPUemV6R9r3',
                 'suite_encoding_aes_key' => 'sfOnSaNgwxLFHM90KwrKzMRTG8jnMccyMsRGZYSOo4V',
             ],
+            // 赞推
+            'ww85afb6954f398bde' => [
+                'suite_id' => 'ww85afb6954f398bde',
+                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
+                'suite_token' => 'FRLiucjHsmi8t9',
+                'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
+            ]
         ];
     }
 
@@ -52,7 +52,8 @@ class ReceiveController extends Controller
             $sEchoStr = "";
             foreach ($this->suiteIds as $k => $v) {
                 $wxcpt = new WXBizMsgCrypt($v['suite_token'], $v['suite_encoding_aes_key'], $this->corpId);
-                $errCode = $wxcpt->VerifyURL($msgSignature, $timestamp, $nonce, $echostr, $sEchoStr);//VerifyURL方法的最后一个参数是带取地址的,
+                // VerifyURL方法的最后一个参数是带取地址的,
+                $errCode = $wxcpt->VerifyURL($msgSignature, $timestamp, $nonce, $echostr, $sEchoStr);
 
                 // 如果err_code === 0 的时候, $sEchoStr肯定不是""
                 if ($errCode == 0) {
@@ -62,7 +63,8 @@ class ReceiveController extends Controller
                     Tools::logError($errCode);
                 }
             }
-        } // 如果是微信推送消息
+        }
+        // 如果是微信推送消息
         else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // post请求的密文数据
             $sReqData = file_get_contents("php://input");
