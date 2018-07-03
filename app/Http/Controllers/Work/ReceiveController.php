@@ -63,8 +63,7 @@ class ReceiveController extends Controller
                     Tools::logError($errCode);
                 }
             }
-        }
-        // 如果是微信推送消息
+        } // 如果是微信推送消息
         else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // post请求的密文数据
             $sReqData = file_get_contents("php://input");
@@ -110,12 +109,15 @@ class ReceiveController extends Controller
         else if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty(request('auth_code'))) {
             $authCode = request('auth_code');
             $state = request('state');
-            // 解密$state获得suiteid, 在授权请求的state参数, 把suite_id传递过去
-            $suiteId = $state;
+            $state = explode(",",$state);
+            // state格式[$suiteId,$corpId]
+            $suiteId = $state[0] ?? '';
+            $corpId = $state[1] ?? '';
             $time = time();
             $sMsg = <<<EOD
 <xml>
   <SuiteId><![CDATA[$suiteId]]></SuiteId>
+  <CorpId><![CDATA[$corpId]]></CorpId>
   <AuthCode><![CDATA[$authCode]]></AuthCode>
   <InfoType><![CDATA[create_auth]]></InfoType>
   <TimeStamp>$time</TimeStamp>
@@ -136,6 +138,7 @@ EOD;
         $xml = new \DOMDocument();
         $xml->loadXML($sMsg);
         $suiteId = $xml->getElementsByTagName('SuiteId')->item(0)->nodeValue;
+        $corpId = $xml->getElementsByTagName('CorpId')->item(0)->nodeValue;
         $infoType = $xml->getElementsByTagName('InfoType')->item(0)->nodeValue;
         $echoStr = 'success';
         switch ($infoType) {
@@ -145,7 +148,8 @@ EOD;
 
                 if (!empty($suiteTicket)) {
                     Tools::logInfo($suiteTicket);
-                    Redis::set('suite_ticket_' . $suiteId, $suiteTicket);
+                    Redis::set('suite_ticket:' . $suiteId, $suiteTicket);
+                    Redis::expire('suite_ticket:' . $suiteId, 1800);
                 } else {
                     // 错误信息
                 }
@@ -174,16 +178,20 @@ EOD;
                     // 服务商辅助授权方式安装应用
                     if ('online' !== $type && 'server' === $type) {
 
-                        $suiteAccessToken = Redis::get('suite_access_token_' . $suiteId);
+                        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
                         $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
                         ];
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
-                        Tools::logInfo(print_r($json, 1));
-                        Redis::set('permanent_code_' . $suiteId, json_encode($json));
-                        Tools::logInfo("获取企业永久授权码成功");
-
+                        if (isset($json['permanent_code'])) {
+                            Redis::set('permanent_code_suite_id:' . $suiteId . ':corp_id:' . $corpId, json_encode($json));
+                            Redis::expire('permanent_code_suite_id:' . $suiteId . ':corp_id:' . $corpId, $json['expires_in']);
+                            Tools::logInfo("获取企业永久授权码成功");
+                        } else {
+                            Tools::logError(print_r($json, 1));
+                            Tools::logError("获取企业永久授权码失败");
+                        }
                     } //线上自助授权安装应用
                     else if ('online' == $type) {
 
@@ -244,7 +252,7 @@ EOD;
         $suiteconfig = $this->suiteIds[$suiteId];
 
         // 获取Redis中存储的 suite_ticket
-        $suiteTicket = Redis::get('suite_ticket_' . $suiteId);
+        $suiteTicket = Redis::get('suite_ticket:' . $suiteId);
 
         $args = [
             'suite_id' => $suiteconfig['suite_id'],
@@ -256,8 +264,8 @@ EOD;
         $json = HttpUtils::httpPostParseToJson($url, $args);
 
         if (isset($json['suite_access_token'])) {
-            Redis::set('suite_access_token_' . $suiteId, $json['suite_access_token']);
-            Redis::expire('suite_access_token_' . $suiteId, 7000);
+            Redis::set('suite_access_token:' . $suiteId, $json['suite_access_token']);
+            Redis::expire('suite_access_token:' . $suiteId, $json['expires_in']);
             return Tools::setData($json);
         } else {
             Tools::logError(json_encode($json));
@@ -271,13 +279,13 @@ EOD;
         $suiteId = request('suite_id', 'ww85afb6954f398bde');
 
         // 获取第三方应用凭证
-        $suiteAccessToken = Redis::get('suite_access_token_' . $suiteId);
+        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
         if (!empty($suiteAccessToken)) {
             $url = HttpUtils::MakeUrl("/cgi-bin/service/get_pre_auth_code?suite_access_token=" . $suiteAccessToken);
             $json = HttpUtils::httpGetParseToJson($url);
             if (isset($json['pre_auth_code'])) {
-                Redis::set('pre_auth_code_' . $suiteId, $json['pre_auth_code']);
-                Redis::expire('pre_auth_code_' . $suiteId, $json['expires_in']);
+                Redis::set('pre_auth_code:' . $suiteId, $json['pre_auth_code']);
+                Redis::expire('pre_auth_code:' . $suiteId, $json['expires_in']);
                 return Tools::setData($json);
             } else {
                 Tools::logError(json_encode($json));
@@ -293,8 +301,8 @@ EOD;
     public function makeTest()
     {
         $suiteId = request('suite_id', 'ww85afb6954f398bde');
-        $preAuthCode = Redis::get('pre_auth_code_'. $suiteId);
-        $suiteAccessToken = Redis::get('suite_access_token_'. $suiteId);
+        $preAuthCode = Redis::get('pre_auth_code:' . $suiteId);
+        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
         $authType = request('auth_type', 0);
 
         if (!empty($preAuthCode)) {

@@ -46,3 +46,10 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
     // 设置授权配置 测试
     $router->get('make-test', ['as' => 'make-test', 'uses' => 'Work\ReceiveController@makeTest']);
 });
+
+
+// 消息通知
+$router->group(['prefix' => 'message'], function () use ($router) {
+    // 设置授权配置 测试
+    $router->get('get-permanent-code', ['as' => 'get-permanent-code', 'uses' => 'Work\MessageController@getPermanentCode']);
+});
