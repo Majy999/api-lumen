@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Redis;
 
 class ReceiveController extends Controller
 {
-    // 数据回调URL
-    public function dataReceive()
+    private $corpId;
+    private $suiteIds;
+
+    public function __construct()
     {
         // 企业号在公众平台上设置的参数如下
-        $corpId = "ww8254a365bf92e5aa";
+        $this->corpId = "ww8254a365bf92e5aa";
 
         // 第三方应用配置
-        $suiteIds = [
+        $this->suiteIds = [
             // 赞推
             'ww85afb6954f398bde' => [
                 'suite_id' => 'ww85afb6954f398bde',
@@ -34,7 +36,11 @@ class ReceiveController extends Controller
                 'suite_encoding_aes_key' => '4gunwtOATycyEh2uUQ2fRsYqQNIE2fxdBJkXERBonq2',
             ],
         ];
+    }
 
+    // 数据回调URL
+    public function dataReceive()
+    {
         $msgSignature = request('msg_signature');
         $timestamp = request('timestamp');
         $nonce = request('nonce');
@@ -44,8 +50,8 @@ class ReceiveController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($echostr)) {
 
             $sEchoStr = "";
-            foreach ($suiteIds as $k => $v) {
-                $wxcpt = new WXBizMsgCrypt($v['suite_token'], $v['suite_encoding_aes_key'], $corpId);
+            foreach ($this->suiteIds as $k => $v) {
+                $wxcpt = new WXBizMsgCrypt($v['suite_token'], $v['suite_encoding_aes_key'], $this->corpId);
                 $errCode = $wxcpt->VerifyURL($msgSignature, $timestamp, $nonce, $echostr, $sEchoStr);//VerifyURL方法的最后一个参数是带取地址的,
 
                 // 如果err_code === 0 的时候, $sEchoStr肯定不是""
@@ -69,7 +75,7 @@ class ReceiveController extends Controller
 
             // 存储当前推送回调这个套件的信息, 用来实例化
             $sassInfo = [];
-            foreach ($suiteIds as $k => $v) {
+            foreach ($this->suiteIds as $k => $v) {
                 if ($v['suite_id'] == $ToUserName) {
                     $sassInfo = $v;
                     $ToUserNameType = 'sutieid';
@@ -138,7 +144,7 @@ EOD;
 
                 if (!empty($suiteTicket)) {
                     Tools::logInfo($suiteTicket);
-                    Redis::set('suite_ticket', $suiteTicket);
+                    Redis::set('suite_ticket' . $suiteId, $suiteTicket);
                 } else {
                     // 错误信息
                 }
@@ -226,31 +232,19 @@ EOD;
      * @author Majy999 <Majy999@outlook.com>
      * @date 2018/7/2 15:15
      */
-    public function getSuiteAccessToken($suiteId = 'ww85afb6954f398bde')
+    public function getSuiteAccessToken()
     {
-        // 企业号在公众平台上设置的参数如下
-        $corpId = "ww8254a365bf92e5aa";
-
-        // 第三方应用配置
-        $suiteIds = [
-            // 赞推
-            'ww85afb6954f398bde' => [
-                'suite_id' => 'ww85afb6954f398bde',
-                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
-                'suite_token' => 'FRLiucjHsmi8t9',
-                'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
-            ],
-        ];
+        $suiteId = request('suite_id', 'ww85afb6954f398bde');
 
         // 获取配置信息
-        $suiteId = $suiteIds[$suiteId];
+        $suiteconfig = $this->suiteIds[$suiteId];
 
         // 获取Redis中存储的 suite_ticket
-        $suiteTicket = Redis::get('suite_ticket');
+        $suiteTicket = Redis::get('suite_ticket' . $suiteId);
 
         $args = [
-            'suite_id' => $suiteId['suite_id'],
-            'suite_secret' => $suiteId['suite_secret'],
+            'suite_id' => $suiteconfig['suite_id'],
+            'suite_secret' => $suiteconfig['suite_secret'],
             'suite_ticket' => $suiteTicket,
         ];
 
@@ -258,8 +252,8 @@ EOD;
         $json = HttpUtils::httpPostParseToJson($url, $args);
 
         if (isset($json['suite_access_token'])) {
-            Redis::set('suite_access_token', $json['suite_access_token']);
-            Redis::expire('suite_access_token', 7000);
+            Redis::set('suite_access_token' . $suiteId, $json['suite_access_token']);
+            Redis::expire('suite_access_token' . $suiteId, 7000);
             return Tools::setData($json);
         } else {
             Tools::logError(json_encode($json));
@@ -270,14 +264,16 @@ EOD;
     // 获取预授权码
     public function getPreAuthCode()
     {
+        $suiteId = request('suite_id', 'ww85afb6954f398bde');
+
         // 获取第三方应用凭证
-        $suiteAccessToken = Redis::get('suite_access_token');
+        $suiteAccessToken = Redis::get('suite_access_token' . $suiteId);
         if (!empty($suiteAccessToken)) {
             $url = HttpUtils::MakeUrl("/cgi-bin/service/get_pre_auth_code?suite_access_token=" . $suiteAccessToken);
             $json = HttpUtils::httpGetParseToJson($url);
             if (isset($json['pre_auth_code'])) {
-                Redis::set('pre_auth_code', $json['pre_auth_code']);
-                Redis::expire('pre_auth_code', $json['expires_in']);
+                Redis::set('pre_auth_code' . $suiteId, $json['pre_auth_code']);
+                Redis::expire('pre_auth_code' . $suiteId, $json['expires_in']);
                 return Tools::setData($json);
             } else {
                 Tools::logError(json_encode($json));
