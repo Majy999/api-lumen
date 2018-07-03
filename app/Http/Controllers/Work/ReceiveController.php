@@ -26,6 +26,13 @@ class ReceiveController extends Controller
                 'suite_token' => 'FRLiucjHsmi8t9',
                 'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
             ],
+            // 测试应用
+            'ww65ff1d66710fd8c5' => [
+                'suite_id' => 'ww65ff1d66710fd8c5',
+                'suite_secret' => '_yRuEL2YtRYjJuSqZo2nu-mNd3UzSFCmovwDghW7bsQ',
+                'suite_token' => 'mYLLhOALlFV5UFkul0B',
+                'suite_encoding_aes_key' => '4gunwtOATycyEh2uUQ2fRsYqQNIE2fxdBJkXERBonq2',
+            ],
         ];
 
         $msgSignature = request('msg_signature');
@@ -46,8 +53,8 @@ class ReceiveController extends Controller
                     echo $sEchoStr;
                     exit;
                 } else {
-                    print("ERR: " . $errCode . "\n\n");
-                    exit;
+                    // print("ERR: " . $errCode . "\n\n");
+                    // exit;
                 }
             }
         } // 如果是微信推送消息
