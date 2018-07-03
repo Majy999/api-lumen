@@ -32,8 +32,8 @@ class ReceiveController extends Controller
             'ww65ff1d66710fd8c5' => [
                 'suite_id' => 'ww65ff1d66710fd8c5',
                 'suite_secret' => '_yRuEL2YtRYjJuSqZo2nu-mNd3UzSFCmovwDghW7bsQ',
-                'suite_token' => 'mYLLhOALlFV5UFkul0B',
-                'suite_encoding_aes_key' => '4gunwtOATycyEh2uUQ2fRsYqQNIE2fxdBJkXERBonq2',
+                'suite_token' => 'MUtPUemV6R9r3',
+                'suite_encoding_aes_key' => 'sfOnSaNgwxLFHM90KwrKzMRTG8jnMccyMsRGZYSOo4V',
             ],
         ];
     }
