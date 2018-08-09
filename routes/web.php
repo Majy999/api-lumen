@@ -45,6 +45,10 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
 
     // 设置授权配置 测试
     $router->get('make-test', ['as' => 'make-test', 'uses' => 'Work\ReceiveController@makeTest']);
+
+    // 数据回调URL
+    $router->get('work-register-receive', ['as' => 'work-register-receive', 'uses' => 'Work\WorkRegisterReceiveController@workRegisterReceive']);
+    $router->post('work-register-receive', ['as' => 'work-register-receive', 'uses' => 'Work\WorkRegisterReceiveController@workRegisterReceive']);
 });
 
 
