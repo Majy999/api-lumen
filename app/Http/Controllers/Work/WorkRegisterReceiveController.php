@@ -59,6 +59,11 @@ class WorkRegisterReceiveController extends Controller
         } else {
             Tools::logInfo("其他请求" . PHP_EOL);
         }
+
+        $sReqData = file_get_contents("php://input");
+        $xml = new \DOMDocument();
+        $xml->loadXML($sReqData);
+        Tools::logInfo("其他请求" . PHP_EOL);
     }
 
 }
