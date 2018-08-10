@@ -22,26 +22,12 @@ class ReceiveController extends Controller
         // 第三方应用配置
         $this->suiteIds = [
             // 测试应用
-            'ww65ff1d66710fd8c5' => [
-                'suite_id' => 'ww65ff1d66710fd8c5',
-                'suite_secret' => '_yRuEL2YtRYjJuSqZo2nu-mNd3UzSFCmovwDghW7bsQ',
-                'suite_token' => 'MUtPUemV6R9r3',
-                'suite_encoding_aes_key' => 'sfOnSaNgwxLFHM90KwrKzMRTG8jnMccyMsRGZYSOo4V',
+            'wwe6e31391320c9631' => [
+                'suite_id' => 'wwe6e31391320c9631',
+                'suite_secret' => '9JYxf4OuGvRzbFPn8h-uoyPTKJubjw4BWbnrgHtkB-0',
+                'suite_token' => 'AOCBP',
+                'suite_encoding_aes_key' => 'nXnOuYHjfhvo54fGef99qeS8HxFu25it9TxdiR6QLkj',
             ],
-            // 赞推
-            'ww85afb6954f398bde' => [
-                'suite_id' => 'ww85afb6954f398bde',
-                'suite_secret' => 'FIVQwHW4SJ_SqlAH9SwjVVEJku_Qkc8PbeGtA8lPR84',
-                'suite_token' => 'FRLiucjHsmi8t9',
-                'suite_encoding_aes_key' => 'vwvYPSPikSxymLof4Ri7RAzVfchzZHv7VTgkifcV18k',
-            ],
-            // 赞推
-            'ww80c31779e77cc4ba' => [
-                'suite_id' => 'ww80c31779e77cc4ba',
-                'suite_secret' => '5mNhxuf52q0QBxGs6ICLm8gvnvDW_SddjoD0d1Bg2Cw',
-                'suite_token' => 'nmkD3T',
-                'suite_encoding_aes_key' => 'QYWkluhAfed1FrW6TGTYTK5H7Bn5CzJ7ti6Rqw5DKsk',
-            ]
         ];
     }
 
