@@ -165,7 +165,7 @@ EOD;
             case 'create_auth':
                 // 获取AuthCode
                 $authCode = $xml->getElementsByTagName('AuthCode')->item(0)->nodeValue;
-                $corpId = $xml->getElementsByTagName('CorpId')->item(0)->nodeValue;
+                $corpId = $this->corpId;
                 if (!empty($authCode)) {
 
                     // 服务商辅助授权方式安装应用
