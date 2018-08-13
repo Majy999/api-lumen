@@ -207,7 +207,7 @@ EOD;
                         $suiteAccessToken = $workService->getSuiteAccessToken($suiteId);
                         Tools::logInfo($suiteId);
                         Tools::logInfo($suiteAccessToken['data']);
-                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
+                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken['data']);
                         $args = [
                             'auth_code' => $authCode,
                         ];
