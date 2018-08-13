@@ -205,6 +205,8 @@ EOD;
                     else if ('online' == $type) {
                         $workService = new WorkService();
                         $suiteAccessToken = $workService->getSuiteAccessToken($suiteId);
+                        Tools::logInfo($suiteId);
+                        Tools::logInfo($suiteAccessToken['data']);
                         $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
@@ -216,7 +218,7 @@ EOD;
                             $permanentCodeRedisKey = 'permanent_code:suite_id:' . $suiteId;
                             Redis::set($permanentCodeRedisKey, $json['permanent_code']);
                             Redis::expire($permanentCodeRedisKey, $json['expires_in']);
-                            Tools::logInfo($json, '获取企业永久授权码成功');
+                            Tools::logInfo($json);
 
                             // auth_corp_info
                             $authCorpidRedisKey = 'auth_corp_id:suite_id:' . $suiteId;
