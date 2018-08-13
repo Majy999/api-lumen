@@ -77,7 +77,7 @@ class Tools
     {
         if (env('LOG_ON', true)) {
             Log::info('==========================');
-            Log::info(print_r($content, 1));
+            Log::info($content);
             Log::info('==========================');
         }
     }
