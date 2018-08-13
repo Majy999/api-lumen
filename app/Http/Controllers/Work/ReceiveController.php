@@ -179,17 +179,17 @@ EOD;
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
                         if (isset($json['permanent_code'])) {
                             // 永久授权码redisKey
-                            $permanentCodeRedisKey = 'zantui:permanent_code:suite_id:' . $suiteId;
+                            $permanentCodeRedisKey = 'permanent_code:suite_id:' . $suiteId;
                             Redis::set($permanentCodeRedisKey, $json['permanent_code']);
                             Redis::expire($permanentCodeRedisKey, $json['expires_in']);
                             Tools::logInfo($json, '获取企业永久授权码成功');
 
                             // auth_corp_info
-                            $authCorpidRedisKey = 'zantui:auth_corp_id:suite_id:' . $suiteId;
+                            $authCorpidRedisKey = 'auth_corp_id:suite_id:' . $suiteId;
                             Redis::set($authCorpidRedisKey, $json['auth_corp_info']['corpid']);
 
                             // agentid
-                            $agentidRedisKey = 'zantui:agentid:suite_id:' . $suiteId;
+                            $agentidRedisKey = 'agentid:suite_id:' . $suiteId;
                             Redis::set($agentidRedisKey, $json['auth_info']['agent'][0]['agentid']);
                         } else {
                             Tools::logError(print_r($json, 1));

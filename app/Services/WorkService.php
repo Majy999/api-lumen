@@ -46,7 +46,7 @@ class WorkService
     public function getSuiteAccessToken($suiteId)
     {
         // 从缓存中获取第三方应用凭证 suite_access_token
-        $suiteAccessTokenRedisKey = 'zantui:suite_access_token:' . $suiteId;
+        $suiteAccessTokenRedisKey = 'suite_access_token:' . $suiteId;
         $suiteAccessToken = Redis::get($suiteAccessTokenRedisKey);
 
         if ($suiteAccessToken) {
@@ -57,7 +57,7 @@ class WorkService
             if (!isset($this->suiteConfigs[$suiteId])) throw new RequestException('请传入正确的suite_id');
 
             // 获取Redis中存储的 suite_ticket
-            $suiteTicket = Redis::get('zantui:suite_ticket:' . $suiteId);
+            $suiteTicket = Redis::get('suite_ticket:' . $suiteId);
 
             if (!$suiteTicket) throw new RequestException('未获取到正确的suite_ticket');
 
@@ -100,7 +100,7 @@ class WorkService
     public function getPreAuthCode($suiteId)
     {
         // 从缓存中获取授权码 pre_auth_code
-        $preAuthCodeRedisKey = 'zantui:pre_auth_code:' . $suiteId;
+        $preAuthCodeRedisKey = 'pre_auth_code:' . $suiteId;
         $preAuthCode = Redis::get($preAuthCodeRedisKey);
 
         if ($preAuthCode) {
@@ -143,7 +143,7 @@ class WorkService
     private function getPermanentCode($suiteId)
     {
         // 永久授权码redisKey
-        $permanentCodeRedisKey = 'zantui:permanent_code:suite_id:' . $suiteId;
+        $permanentCodeRedisKey = 'permanent_code:suite_id:' . $suiteId;
         $permanentCode = Redis::get($permanentCodeRedisKey);
 
         if ($permanentCode) {
@@ -166,14 +166,14 @@ class WorkService
     public function getCropAccessToken($suiteId)
     {
         // 企业access_token redisKey
-        $corpAccessTokenRedisKey = 'zantui:corp_access_token:suite_id:' . $suiteId;
+        $corpAccessTokenRedisKey = 'corp_access_token:suite_id:' . $suiteId;
         $corpAccessToken = Redis::get($corpAccessTokenRedisKey);
 
         if ($corpAccessToken) {
             return Tools::setData($corpAccessToken);
         } else {
 
-            $authCorpidRedisKey = 'zantui:auth_corp_id:suite_id:' . $suiteId;
+            $authCorpidRedisKey = 'auth_corp_id:suite_id:' . $suiteId;
             $authCorpid = Redis::get($authCorpidRedisKey);
 
             if (!$authCorpid) throw new RequestException('获取企业的corpid失败');
@@ -259,7 +259,7 @@ class WorkService
         if (empty($content)) return Tools::error('发送企业微信消息：content 参数不能为空');
 
         // 获取应用id
-        $agentidRedisKey = 'zantui:agentid:suite_id:' . $this->suiteId;
+        $agentidRedisKey = 'agentid:suite_id:' . $this->suiteId;
         $agentId = Redis::get($agentidRedisKey);
         if (!$agentId) return Tools::error('获取不到agent_id');
 
