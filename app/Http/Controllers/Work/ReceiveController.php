@@ -166,6 +166,9 @@ EOD;
                 // 获取AuthCode
                 $authCode = $xml->getElementsByTagName('AuthCode')->item(0)->nodeValue;
                 $corpId = $this->corpId;
+
+                Tools::logInfo($type, '$type');
+                Tools::logInfo($authCode, '$authCode');
                 if (!empty($authCode)) {
 
                     // 服务商辅助授权方式安装应用
@@ -177,6 +180,7 @@ EOD;
                             'auth_code' => $authCode,
                         ];
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
+                        Tools::logInfo($json, '服务商辅助授权方式安装应用');
                         if (isset($json['permanent_code'])) {
                             // 永久授权码redisKey
                             $permanentCodeRedisKey = 'permanent_code:suite_id:' . $suiteId;
