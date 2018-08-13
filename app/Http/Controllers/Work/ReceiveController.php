@@ -6,6 +6,7 @@ use App\Helpers\HttpUtils;
 use App\Helpers\Tools;
 use App\Http\Controllers\Controller;
 use App\Services\WeChatService;
+use App\Services\WorkService;
 use Extend\WorkWechat\Server\WXBizMsgCrypt;
 use Illuminate\Support\Facades\Redis;
 
@@ -174,7 +175,8 @@ EOD;
                     // 服务商辅助授权方式安装应用
                     if ('online' !== $type && 'server' === $type) {
 
-                        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
+                        $workService = new WorkService();
+                        $suiteAccessToken = $workService->getSuiteAccessToken($suiteId);
                         $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
@@ -201,7 +203,8 @@ EOD;
                         }
                     } //线上自助授权安装应用
                     else if ('online' == $type) {
-                        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
+                        $workService = new WorkService();
+                        $suiteAccessToken = $workService->getSuiteAccessToken($suiteId);
                         $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
                         $args = [
                             'auth_code' => $authCode,
