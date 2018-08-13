@@ -33,24 +33,13 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
     $router->get('data-receive', ['as' => 'data-receive', 'uses' => 'Work\ReceiveController@dataReceive']);
     $router->post('data-receive', ['as' => 'data-receive', 'uses' => 'Work\ReceiveController@dataReceive']);
 
-    // 指令回调URL
-    $router->get('handle-receive', ['as' => 'handle-receive', 'uses' => 'Work\ReceiveController@handleReceive']);
-    $router->post('handle-receive', ['as' => 'handle-receive', 'uses' => 'Work\ReceiveController@handleReceive']);
-
-    // 获取第三方应用凭证 suite_access_token
-    $router->get('get-suite-access-token', ['as' => 'get-suite-access-token', 'uses' => 'Work\ReceiveController@getSuiteAccessToken']);
-
-    // 获取预授权码 pre_auth_code
-    $router->get('get-pre-auth-code', ['as' => 'get-pre-auth-code', 'uses' => 'Work\ReceiveController@getPreAuthCode']);
-
-    // 设置授权配置 测试
-    $router->get('make-test', ['as' => 'make-test', 'uses' => 'Work\ReceiveController@makeTest']);
-
     // 数据回调URL
     $router->get('work-register-receive', ['as' => 'work-register-receive', 'uses' => 'Work\WorkRegisterReceiveController@workRegisterReceive']);
     $router->post('work-register-receive', ['as' => 'work-register-receive', 'uses' => 'Work\WorkRegisterReceiveController@workRegisterReceive']);
 });
 
+// 第三方应用授权
+$router->post('work-server', ['as' => 'work-server-authorization', 'uses' => 'WorkServerController@workServerAuthorization']);
 
 // 消息通知
 $router->group(['prefix' => 'message'], function () use ($router) {
