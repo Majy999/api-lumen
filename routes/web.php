@@ -39,7 +39,7 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
 });
 
 // 第三方应用授权
-$router->post('work-server', ['as' => 'work-server-authorization', 'uses' => 'WorkServerController@workServerAuthorization']);
+$router->get('work-server', ['as' => 'work-server-authorization', 'uses' => 'WorkServerController@workServerAuthorization']);
 
 // 消息通知
 $router->group(['prefix' => 'message'], function () use ($router) {
