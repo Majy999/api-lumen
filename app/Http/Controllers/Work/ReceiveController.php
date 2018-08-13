@@ -201,7 +201,31 @@ EOD;
                         }
                     } //线上自助授权安装应用
                     else if ('online' == $type) {
+                        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
+                        $url = HttpUtils::MakeUrl("/cgi-bin/service/get_permanent_code?suite_access_token=" . $suiteAccessToken);
+                        $args = [
+                            'auth_code' => $authCode,
+                        ];
+                        $json = HttpUtils::HttpPostParseToJson($url, $args);
+                        Tools::logInfo($json, '服务商辅助授权方式安装应用');
+                        if (isset($json['permanent_code'])) {
+                            // 永久授权码redisKey
+                            $permanentCodeRedisKey = 'permanent_code:suite_id:' . $suiteId;
+                            Redis::set($permanentCodeRedisKey, $json['permanent_code']);
+                            Redis::expire($permanentCodeRedisKey, $json['expires_in']);
+                            Tools::logInfo($json, '获取企业永久授权码成功');
 
+                            // auth_corp_info
+                            $authCorpidRedisKey = 'auth_corp_id:suite_id:' . $suiteId;
+                            Redis::set($authCorpidRedisKey, $json['auth_corp_info']['corpid']);
+
+                            // agentid
+                            $agentidRedisKey = 'agentid:suite_id:' . $suiteId;
+                            Redis::set($agentidRedisKey, $json['auth_info']['agent'][0]['agentid']);
+                        } else {
+                            Tools::logError(print_r($json, 1));
+                            Tools::logError("获取企业永久授权码失败");
+                        }
                     }
                 }
                 break;
