@@ -178,9 +178,19 @@ EOD;
                         ];
                         $json = HttpUtils::HttpPostParseToJson($url, $args);
                         if (isset($json['permanent_code'])) {
-                            Redis::set('permanent_code_suite_id:' . $suiteId . ':corp_id:' . $corpId, json_encode($json));
-                            Redis::expire('permanent_code_suite_id:' . $suiteId . ':corp_id:' . $corpId, $json['expires_in']);
-                            Tools::logInfo("获取企业永久授权码成功");
+                            // 永久授权码redisKey
+                            $permanentCodeRedisKey = 'zantui:permanent_code:suite_id:' . $suiteId;
+                            Redis::set($permanentCodeRedisKey, $json['permanent_code']);
+                            Redis::expire($permanentCodeRedisKey, $json['expires_in']);
+                            Tools::logInfo($json, '获取企业永久授权码成功');
+
+                            // auth_corp_info
+                            $authCorpidRedisKey = 'zantui:auth_corp_id:suite_id:' . $suiteId;
+                            Redis::set($authCorpidRedisKey, $json['auth_corp_info']['corpid']);
+
+                            // agentid
+                            $agentidRedisKey = 'zantui:agentid:suite_id:' . $suiteId;
+                            Redis::set($agentidRedisKey, $json['auth_info']['agent'][0]['agentid']);
                         } else {
                             Tools::logError(print_r($json, 1));
                             Tools::logError("获取企业永久授权码失败");
@@ -286,31 +296,6 @@ EOD;
             }
         } else {
             return Tools::error('获取第三方应用凭证不能为空');
-        }
-    }
-
-    // 测试授权
-    // todo,正式上线之前，要记得改回非开发模式
-    public function makeTest()
-    {
-        $suiteId = request('suite_id', 'ww85afb6954f398bde');
-        $preAuthCode = Redis::get('pre_auth_code:' . $suiteId);
-        $suiteAccessToken = Redis::get('suite_access_token:' . $suiteId);
-        $authType = request('auth_type', 0);
-
-        if (!empty($preAuthCode)) {
-            $args = [
-                'pre_auth_code' => $preAuthCode,
-                'session_info' => [
-                    'auth_type' => $authType,
-                ]
-            ];
-
-            $url = HttpUtils::MakeUrl("/cgi-bin/service/set_session_info?suite_access_token=" . $suiteAccessToken);
-            $json = HttpUtils::httpPostParseToJson($url, $args);
-            return Tools::setData($json);
-        } else {
-            return Tools::error('pre_auth_code为空');
         }
     }
 
