@@ -246,15 +246,13 @@ class WorkService
      *
      * @author Jy马 <Majy999@outlook.com>
      * @date 2018/7/7 10:48
-     * @param $suiteAlias
-     * @param $merchantId
      * @param $userId
      * @param string $content
      * @since PM_1.0_zantui
      * @return array|mixed
      * @throws RequestException
      */
-    public function sendMessage($suiteAlias = 'ai_radar', $merchantId, $userId, $content = 'test content')
+    public function sendMessage($userId, $content = 'test content')
     {
         if (empty($content)) return Tools::error('发送企业微信消息：content 参数不能为空');
 
@@ -394,7 +392,6 @@ class WorkService
         $url = HttpUtils::MakeUrl("/cgi-bin/user/list?access_token=" . $cropAccessToken['data'] . '&department_id=' . $departmentId . '&fetch_child=' . $fetchChild);
         $json = HttpUtils::httpGetParseToJson($url);
 
-        if ($json['errcode'] != 0) throw new RequestException($json['errmsg']);
         return $json;
     }
 
@@ -426,7 +423,6 @@ class WorkService
         $url = HttpUtils::MakeUrl("/cgi-bin/user/create?access_token=" . $cropAccessToken['data']);
         $json = HttpUtils::httpPostParseToJson($url, $args);
 
-        if ($json['errcode'] != 0) throw new RequestException($json['errmsg']);
         return $json;
     }
 

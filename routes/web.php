@@ -41,6 +41,12 @@ $router->group(['prefix' => 'receive'], function () use ($router) {
 // 第三方应用授权
 $router->get('work-server', ['as' => 'work-server-authorization', 'uses' => 'WorkServerController@workServerAuthorization']);
 
+// 创建员工
+$router->get('create-user', ['as' => 'create-user', 'uses' => 'WorkServerController@createUser']);
+
+// 创建员工
+$router->get('user-list', ['as' => 'user-list', 'uses' => 'WorkServerController@userList']);
+
 // 消息通知
 $router->group(['prefix' => 'message'], function () use ($router) {
     // 设置授权配置 测试

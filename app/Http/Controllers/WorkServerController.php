@@ -111,4 +111,26 @@ class WorkServerController extends Controller
         }
         return $this->response($response);
     }
+
+    public function createUser()
+    {
+        $mobile = request('mobile');
+
+        $data = [
+            'mobile' => $mobile,
+            'name' => $mobile,
+            'department' => [1], // 默认部门为1
+            'position' => '',
+        ];
+        $workService = new WorkService();
+        $result = $workService->createUser($data);
+        return $this->response(Tools::setData($result));
+    }
+
+    public function userList()
+    {
+        $workService = new WorkService();
+        $result = $workService->userList(1,1);
+        return $this->response(Tools::setData($result));
+    }
 }
