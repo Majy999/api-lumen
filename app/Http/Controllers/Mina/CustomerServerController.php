@@ -18,7 +18,6 @@ class CustomerServerController extends Controller
      */
     public function customerServer()
     {
-        Tools::logInfo("其他请求" . PHP_EOL);
         // 第一次绑定消息推送url的时候，调用该方法
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $this->valid();
@@ -39,7 +38,7 @@ class CustomerServerController extends Controller
             if ($event == 'user_enter_tempsession') {
                 $sessionFrom = explode(',', $sessionFrom);
             } else {
-                if ($content == '我要加群' || $event == 'miniprogrampage') {
+                if ($content == '我要加群' || $msgType == 'miniprogrampage') {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
