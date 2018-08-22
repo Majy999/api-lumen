@@ -11,7 +11,7 @@ class MinaService
     protected $miniProgram;
     protected $openPlatform;
 
-    public function __construct($weixin = 'jike-wap')
+    public function __construct()
     {
         $predis = app('redis')->connection('default')->client();
         $cacheDriver = new RedisCache($predis);
@@ -20,7 +20,7 @@ class MinaService
             'app_id' => 'wx2ff39cb77a670249',
             'app_secret' => '2a2d19a4d4e57c0f353c4266a3e5f676',
             'token' => 'token',
-            'aes_key' => '',
+            'aes_key' => 'MShyG8ghPmrgDtjpEuoeUjBuCGnlwjjwwNcN69nKSt4',
         ];
         $this->options = [
             'app_id' => $option['app_id'],
