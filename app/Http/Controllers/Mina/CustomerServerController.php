@@ -49,13 +49,13 @@ class CustomerServerController extends Controller
                 if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
-                    $url = 'https://api.majy999.com/wx-setting';
+                    $url = 'https://api.majy999.com/wx-setting?merchant_id=xxx';
                     $message = new Raw('{
                         "touser": "' . $openId . '",
                         "msgtype": "link",
                         "link": {
-                              "title": "' . $title . ': 设置微信",
-                              "description": "编辑个人微信二维码",
+                              "title": "' . $title . ': 上传机器人微信二维码",
+                              "description": "上传机器人微信二维码",
                               "url": "' . $url . '",
                               "thumb_url": "' . $logo . '"
                         }
