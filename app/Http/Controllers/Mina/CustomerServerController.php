@@ -43,11 +43,10 @@ class CustomerServerController extends Controller
                 Redis::set($sessionFromKey, $sessionFrom[0]);
                 Redis::expire($sessionFromKey, 1500);
             } else {
-                $sessionFrom = Redis::get($sessionFrom);
-                Tools::logInfo($sessionFrom, 'sessionFrom');
+                $sessionFrom = Redis::get($sessionFromKey);
 
                 // 设置微信
-                if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == 1)) {
+                if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
@@ -71,7 +70,7 @@ class CustomerServerController extends Controller
                 }
 
                 // 我要加群
-                if ($content == '我要加群' || ($msgType == 'miniprogrampage' && $sessionFrom == 2)) {
+                if ($content == '我要加群' || ($msgType == 'miniprogrampage' && $sessionFrom == '2')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
