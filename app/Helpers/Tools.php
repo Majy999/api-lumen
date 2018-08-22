@@ -73,11 +73,12 @@ class Tools
      * 单个日志输出
      * @param string $content
      */
-    public static function logInfo($content)
+    public static function logInfo($content, $title = null)
     {
         if (env('LOG_ON', true)) {
+            if ($title) Log::info($title);
             Log::info('==========================');
-            Log::info($content);
+            Log::info(print_r($content, true));
             Log::info('==========================');
         }
     }

@@ -108,4 +108,12 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+// 小程序
+$app->router->group([
+    'prefix' => env('APP_VERSION') . '/api/mina',
+    'namespace' => 'App\Http\Controllers\Mina',
+], function ($router) {
+    require __DIR__ . '/../routes/mina.php';
+});
+
 return $app;
