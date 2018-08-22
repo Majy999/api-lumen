@@ -39,11 +39,10 @@ class CustomerServerController extends Controller
             if ($event == 'user_enter_tempsession') {
                 $sessionFrom = explode(',', $sessionFrom);
             } else {
-                if ($content == '我要开店') {
+                if ($content == '我要加群' || $event == 'miniprogrampage') {
                     $title = '集客';
-                    $logo = 'http://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
-                    $host = 'https://h5.jkweixin.com/?type=ws#';
-                    $url = $host . '/ws-qr-code?employee_id=100001';
+                    $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
+                    $url = 'https://api.majy999.com/join-group';
                     $message = new Raw('{
                         "touser": "' . $openId . '",
                         "msgtype": "link",

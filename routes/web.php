@@ -52,3 +52,6 @@ $router->group(['prefix' => 'message'], function () use ($router) {
     // 设置授权配置 测试
     $router->get('get-permanent-code', ['as' => 'get-permanent-code', 'uses' => 'Work\MessageController@getPermanentCode']);
 });
+
+// 加群页面
+$router->get('join-group', ['as' => 'join-group', 'uses' => 'WebController@joinGroupView']);
