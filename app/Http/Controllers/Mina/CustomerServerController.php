@@ -44,9 +44,10 @@ class CustomerServerController extends Controller
                 Redis::expire($sessionFromKey, 1500);
             } else {
                 $sessionFrom = Redis::get($sessionFrom);
+                Tools::logInfo($sessionFrom, 'sessionFrom');
 
                 // 设置微信
-                if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
+                if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == 1)) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
@@ -54,8 +55,8 @@ class CustomerServerController extends Controller
                         "touser": "' . $openId . '",
                         "msgtype": "link",
                         "link": {
-                              "title": "' . $title . ': 点击加群",
-                              "description": "长按扫码添加好友加群",
+                              "title": "' . $title . ': 设置微信",
+                              "description": "编辑个人微信二维码",
                               "url": "' . $url . '",
                               "thumb_url": "' . $logo . '"
                         }
@@ -70,7 +71,7 @@ class CustomerServerController extends Controller
                 }
 
                 // 我要加群
-                if ($content == '我要加群' || ($msgType == 'miniprogrampage' && $sessionFrom == '2')) {
+                if ($content == '我要加群' || ($msgType == 'miniprogrampage' && $sessionFrom == 2)) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
@@ -78,7 +79,7 @@ class CustomerServerController extends Controller
                         "touser": "' . $openId . '",
                         "msgtype": "link",
                         "link": {
-                              "title": "' . $title . ': 点击加群",
+                              "title": "' . $title . ': 我要加群",
                               "description": "长按扫码添加好友加群",
                               "url": "' . $url . '",
                               "thumb_url": "' . $logo . '"
