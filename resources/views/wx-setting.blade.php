@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>加群</title>
+    <title>微信设置</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -73,37 +73,11 @@
 
     <div class="content">
         <div class="title m-b-md">
-            加群
+            设置微信
         </div>
-
-        <div class="links" style="margin-bottom: 30px">
-            <button id="openService">加群</button>
+            <button id="openService">设置微信</button>
         </div>
     </div>
 </div>
 </body>
 </html>
-
-<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">
-    $(function () {
-        $('#openService').click(function () {
-            var base = $('select[name=baseUrl]').val();
-            var mobile = $('input[name=mobile]').val();
-            $.ajax(base + '/open-service', {
-                type: 'POST',
-                data: {
-                    mobile: mobile,
-                },
-                success: function (msg) {
-                    alert(msg.message);
-                    console.log(msg);
-                },
-                error: function (msg) {
-                    alert(msg.message);
-                    console.log(msg);
-                }
-            });
-        });
-    });
-</script>

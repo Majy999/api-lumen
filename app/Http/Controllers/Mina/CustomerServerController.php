@@ -6,6 +6,7 @@ use App\Helpers\Tools;
 use App\Http\Controllers\Controller;
 use App\Services\MinaService;
 use EasyWeChat\Kernel\Messages\Raw;
+use Illuminate\Support\Facades\Redis;
 
 class CustomerServerController extends Controller
 {
@@ -34,11 +35,18 @@ class CustomerServerController extends Controller
             $content = $receiveMessages['Content'] ?? '';
             $sessionFrom = $receiveMessages['SessionFrom'] ?? '';
 
+            $sessionFromKey = "sessionFrom:$openId";
+
             // 点击客服按钮进入客服
             if ($event == 'user_enter_tempsession') {
                 $sessionFrom = explode(',', $sessionFrom);
+                Redis::set($sessionFromKey, $sessionFrom[0]);
+                Redis::expire($sessionFromKey, 1500);
             } else {
-                if ($content == '我要加群' || $msgType == 'miniprogrampage') {
+                $sessionFrom = Redis::get($sessionFrom);
+
+                // 设置微信
+                if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/join-group';
@@ -46,8 +54,32 @@ class CustomerServerController extends Controller
                         "touser": "' . $openId . '",
                         "msgtype": "link",
                         "link": {
-                              "title": "' . $title . ': 扫码关注企业微信",
-                              "description": "长按扫码关注企业微信",
+                              "title": "' . $title . ': 点击加群",
+                              "description": "长按扫码添加好友加群",
+                              "url": "' . $url . '",
+                              "thumb_url": "' . $logo . '"
+                        }
+                  }');
+                    // 回复消息
+                    $result = $minaService->customerServerSend($message, $openId);
+
+                    // 打印错误日志
+                    if (!$result) {
+                        Tools::logInfo(print_r($result, 1));
+                    }
+                }
+
+                // 我要加群
+                if ($content == '我要加群' || ($msgType == 'miniprogrampage' && $sessionFrom == '2')) {
+                    $title = '集客';
+                    $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
+                    $url = 'https://api.majy999.com/join-group';
+                    $message = new Raw('{
+                        "touser": "' . $openId . '",
+                        "msgtype": "link",
+                        "link": {
+                              "title": "' . $title . ': 点击加群",
+                              "description": "长按扫码添加好友加群",
                               "url": "' . $url . '",
                               "thumb_url": "' . $logo . '"
                         }

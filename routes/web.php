@@ -55,3 +55,6 @@ $router->group(['prefix' => 'message'], function () use ($router) {
 
 // 加群页面
 $router->get('join-group', ['as' => 'join-group', 'uses' => 'WebController@joinGroupView']);
+
+// 设置微信
+$router->get('wx-setting', ['as' => 'wx-setting', 'uses' => 'WebController@wxSettingView']);
