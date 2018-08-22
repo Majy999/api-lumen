@@ -49,7 +49,7 @@ class CustomerServerController extends Controller
                 if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
-                    $url = 'https://api.majy999.com/join-group';
+                    $url = 'https://api.majy999.com/wx-setting';
                     $message = new Raw('{
                         "touser": "' . $openId . '",
                         "msgtype": "link",
