@@ -58,3 +58,6 @@ $router->get('join-group', ['as' => 'join-group', 'uses' => 'WebController@joinG
 
 // 设置微信
 $router->get('wx-setting', ['as' => 'wx-setting', 'uses' => 'WebController@wxSettingView']);
+
+// 微信模拟登录
+$router->get('login-wxmock', ['as' => 'login-wxmock', 'uses' => 'WebController@loginWxmock']);

@@ -91,6 +91,7 @@ if ($app->environment() !== 'production') {
 $app->configure('database');
 $app->configure('rpc');
 $app->configure('wechat');
+$app->configure('vbot');
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -114,6 +115,14 @@ $app->router->group([
     'namespace' => 'App\Http\Controllers\Mina',
 ], function ($router) {
     require __DIR__ . '/../routes/mina.php';
+});
+
+// 微信模拟
+$app->router->group([
+    'prefix' => env('APP_VERSION') . '/api/wxmock',
+    'namespace' => 'App\Http\Controllers\WxMock',
+], function ($router) {
+    require __DIR__ . '/../routes/wxmock.php';
 });
 
 return $app;

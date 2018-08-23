@@ -49,7 +49,7 @@ class CustomerServerController extends Controller
                 if ($content == '设置微信' || ($msgType == 'miniprogrampage' && $sessionFrom == '1')) {
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
-                    $url = 'https://api.majy999.com/wx-setting?merchant_id=xxx';
+                    $url = 'https://api.majy999.com/wx-setting?open_id=xxx' . $openId;
                     $message = new Raw('{
                         "touser": "' . $openId . '",
                         "msgtype": "link",
@@ -80,6 +80,31 @@ class CustomerServerController extends Controller
                         "link": {
                               "title": "' . $title . ': 我要加群",
                               "description": "长按扫码添加好友加群",
+                              "url": "' . $url . '",
+                              "thumb_url": "' . $logo . '"
+                        }
+                  }');
+                    // 回复消息
+                    $result = $minaService->customerServerSend($message, $openId);
+
+                    // 打印错误日志
+                    if (!$result) {
+                        Tools::logInfo(print_r($result, 1));
+                    }
+                }
+
+                // 登陆
+                if ($content == '我要登陆' || ($msgType == 'miniprogrampage' && $sessionFrom == '3')) {
+
+                    $title = '集客';
+                    $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
+                    $url = 'https://api.majy999.com/login-wxmock';
+                    $message = new Raw('{
+                        "touser": "' . $openId . '",
+                        "msgtype": "link",
+                        "link": {
+                              "title": "' . $title . ': 请求登录",
+                              "description": "请求扫码登录",
                               "url": "' . $url . '",
                               "thumb_url": "' . $logo . '"
                         }
