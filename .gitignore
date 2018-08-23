@@ -1,5 +1,6 @@
 /vendor
 /config/tmp
+/public/image/qrcode
 /.idea
 Homestead.json
 Homestead.yaml
