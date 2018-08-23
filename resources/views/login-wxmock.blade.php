@@ -98,7 +98,7 @@
         <div class="title m-b-md">
             模拟登录
         </div>
-        <img src="https://api.majy999.com/image/qrcode/{{ $session }}.jpg?v=" {{time()}}  alt="长按识别登录" />
+        <img src="https://api.majy999.com/image/qrcode/{{ $session }}.jpg?v={{time()}}"   alt="长按识别登录" />
         <button id="mockLogin">请求登录</button>
         </div>
     </div>
