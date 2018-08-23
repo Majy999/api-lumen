@@ -10,17 +10,27 @@ check_exist_process_run() {
         echo "存在进程！"
         kill -9 $pid
     fi
-    nohup  php /data/wwwroot/api.majy999.com/artisan wxmock $data  &
+     echo "data_start:$data"
+     php /data/wwwroot/api.majy999.com/artisan wxmock $data
+     echo "data_end:$data"
 }
 
 
-data=$(echo "rPop wxmock" | $RedisBin  -h $RedisIpaddr -a $RedisPassword 2>/dev/null)
 
-data_lenth=$(echo -n $data|wc -c)
-if [ $data_lenth -eq 0 ]; then
-    #echo  "没有数据"
-    exit -1;
-else
-    check_exist_process_run
-fi
+while true; do 
+	data=$(echo "rPop wxmock" | $RedisBin  -h $RedisIpaddr -a $RedisPassword 2>/dev/null)
+	data_lenth=$(echo -n $data|wc -c)
+	if [ $data_lenth -eq 0 ]; then
+    		echo  "没有数据"
+    		#exit -1;
+	else
+		echo  "接收数据:$data"
+    		check_exist_process_run
+	fi
+	sleep 1;
+done
+
+
+
+
 
