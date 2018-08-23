@@ -106,7 +106,7 @@ class WxMock extends Command
             // 发送客服消息
             $title = '集客';
             $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
-            $url = 'https://api.majy999.com/login-wxmock';
+            $url = 'https://api.majy999.com/login-wxmock?session=' . $session;
             $message = new Raw('{
                         "touser": "' . $session . '",
                         "msgtype": "link",

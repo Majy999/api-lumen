@@ -73,7 +73,7 @@
         $(function () {
             $('#mockLogin').click(function () {
                 var session = {{ $session }};
-                $.ajax('https://api.majy999.com/api/wxmock/get-qrcode', {
+                $.ajax('/api/wxmock/get-qrcode', {
                     type: 'get',
                     data: {
                         session: session,

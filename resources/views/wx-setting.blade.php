@@ -67,17 +67,21 @@
             display: none;
         }
     </style>
+
 </head>
 <body>
 <div class="flex-center position-ref full-height">
 
     <div class="content">
-        <div class="title m-b-md">
-            设置微信
-        </div>
-            <button id="openService">设置微信</button>
-        </div>
+            <form action="{{ URL('/api/wxmock/upload-qrcode') }}" enctype="multipart/form-data" method="POST">
+                <input type="file" name="file">
+                <input type="hidden" name="session"value="{{ $session }}">
+                <br/>
+                <input type="submit" value="提交">
+            </form>
     </div>
 </div>
+
+
 </body>
 </html>

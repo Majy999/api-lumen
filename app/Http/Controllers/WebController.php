@@ -8,13 +8,15 @@ class WebController extends Controller
     // 加群页面
     public function joinGroupView()
     {
-        return View('join_group');
+        $session = request('session', 123);
+        return View('join_group', compact('session'));
     }
 
     // 加群页面
     public function wxSettingView()
     {
-        return View('wx-setting');
+        $session = request('session', 123);
+        return View('wx-setting', compact('session'));
     }
 
     // 模拟微信登录要用
