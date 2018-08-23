@@ -1,7 +1,7 @@
 #!/bin/bash
 RedisIpaddr=127.0.0.1
 RedisPassword='123456'
-RedisBin='/usr/local/redis/bin/redis-cli'
+RedisBin='redis-cli'
 
 check_exist_process_run() {
     exist_process_num=$(ps -elf | grep wxmock| grep -v grep| grep $data|wc -l)
