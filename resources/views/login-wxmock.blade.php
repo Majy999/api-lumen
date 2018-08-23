@@ -72,7 +72,7 @@
     <script type="text/javascript">
         $(function () {
             $('#mockLogin').click(function () {
-                var session = {{ $session }};
+                var session = "{{ $session }}";
                 $.ajax('/api/wxmock/get-qrcode', {
                     type: 'get',
                     data: {
