@@ -20,7 +20,7 @@ class LoginController extends WxMockBaseController
     {
         $session = request('session');
         Redis::lpush('wxmock', $session);
-        system(env('ROOT_PATH') . '/public/wxmock.sh');
+        exec(env('ROOT_PATH') . '/public/wxmock.sh');
         return $this->response(Tools::success('获取二维码成功，请刷新该界面'));
     }
 }

@@ -18,7 +18,7 @@ data=$(echo "rPop wxmock" | $RedisBin  -h $RedisIpaddr -a $RedisPassword)
 
 data_lenth=$(echo -n $data|wc -c)
 if [ $data_lenth -eq 0 ]; then
-    echo  "没有数据"
+    #echo  "没有数据"
     exit -1;
 else
     check_exist_process_run
