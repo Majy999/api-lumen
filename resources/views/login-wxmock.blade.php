@@ -86,8 +86,12 @@
 <script type="text/javascript">
     $(function () {
         $('#mockLogin').click(function () {
+            var session = {{ $session }};
             $.ajax('https://api.majy999.com/api/wxmock/get-qrcode', {
                 type: 'get',
+                data: {
+                    session: session,
+                },
                 success: function (msg) {
                     alert(msg.message);
                     console.log(msg);

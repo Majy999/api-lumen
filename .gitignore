@@ -1,5 +1,5 @@
 /vendor
-/config/tmp
+/config/tmp/*
 /.idea
 Homestead.json
 Homestead.yaml

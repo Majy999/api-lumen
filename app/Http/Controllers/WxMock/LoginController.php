@@ -4,6 +4,7 @@ namespace App\Http\Controllers\WxMock;
 
 use App\Helpers\Tools;
 use Hanson\Vbot\Foundation\Vbot as Bot;
+use Illuminate\Support\Facades\Redis;
 
 class LoginController extends WxMockBaseController
 {
@@ -17,6 +18,8 @@ class LoginController extends WxMockBaseController
      */
     public function getQrcode()
     {
+        $session = request('session');
+        Redis::lpush('wxmock', $session);
         exec(env('ROOT_PATH') . '/public/wxmock.sh');
         return $this->response(Tools::success('获取二维码成功，请刷新该界面'));
     }
