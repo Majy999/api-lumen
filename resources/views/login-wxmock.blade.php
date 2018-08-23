@@ -67,6 +67,29 @@
             display: none;
         }
     </style>
+
+    <script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#mockLogin').click(function () {
+                var session = {{ $session }};
+                $.ajax('https://api.majy999.com/api/wxmock/get-qrcode', {
+                    type: 'get',
+                    data: {
+                        session: session,
+                    },
+                    success: function (msg) {
+                        alert(msg.message);
+                        console.log(msg);
+                    },
+                    error: function (msg) {
+                        alert(msg.message);
+                        console.log(msg);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -82,25 +105,3 @@
 </div>
 </body>
 </html>
-
-<script type="text/javascript">
-    $(function () {
-        $('#mockLogin').click(function () {
-            var session = {{ $session }};
-            $.ajax('https://api.majy999.com/api/wxmock/get-qrcode', {
-                type: 'get',
-                data: {
-                    session: session,
-                },
-                success: function (msg) {
-                    alert(msg.message);
-                    console.log(msg);
-                },
-                error: function (msg) {
-                    alert(msg.message);
-                    console.log(msg);
-                }
-            });
-        });
-    });
-</script>
