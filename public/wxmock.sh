@@ -10,7 +10,7 @@ check_exist_process_run() {
         echo "存在进程！"
         kill -9 $pid
     fi
-    nohup  php /data/web/api.majy999.com/artisan wxmock $data  &
+    nohup  php /data/wwwroot/api.majy999.com/artisan wxmock $data  &
 }
 
 
