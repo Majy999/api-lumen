@@ -14,7 +14,7 @@ check_exist_process_run() {
 }
 
 
-data=$(echo "rPop wxmock" | $RedisBin  -h $RedisIpaddr -a $RedisPassword)
+data=$(echo "rPop wxmock" | $RedisBin  -h $RedisIpaddr -a $RedisPassword 2>/dev/null)
 
 data_lenth=$(echo -n $data|wc -c)
 if [ $data_lenth -eq 0 ]; then
