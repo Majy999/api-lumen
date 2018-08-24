@@ -1,4 +1,5 @@
 /vendor
+/public/tmp
 /config/tmp
 /public/image/qrcode
 /public/image/userQrcode

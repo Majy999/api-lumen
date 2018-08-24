@@ -1,6 +1,6 @@
 <?php
 
-$path = __DIR__.'/tmp/';
+$path = public_path() . '/tmp/';
 
 return [
     'path'     => $path,
