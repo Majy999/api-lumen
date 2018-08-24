@@ -139,7 +139,7 @@ class WxMock extends Command
 
         // 程序退出监听器
         $observer->setExitObserver(function () {
-            vbot('console')->log('登陆失败', '程序退出');
+            vbot('console')->log('程序退出监听器', '程序退出监听器');
         });
 
         // 好友监听器

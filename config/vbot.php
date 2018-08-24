@@ -28,7 +28,7 @@ return [
      */
     'console' => [
         'output'  => true, // 是否输出
-        'message' => true, // 是否输出接收消息 （若上面为 false 此处无效）
+        'message' => false, // 是否输出接收消息 （若上面为 false 此处无效）
     ],
     /*
      * 日志配置项
@@ -43,7 +43,7 @@ return [
      * 缓存配置项
      */
     'cache' => [
-        'default' => 'file',
+        'default' => 'redis',
         'stores'  => [
             'file' => [
                 'driver' => 'file',
@@ -59,10 +59,10 @@ return [
         'redis' => [
             'client'  => 'predis',
             'default' => [
-                'host'     => '127.0.0.1',
-                'password' => 123456,
-                'port'     => 6379,
-                'database' => 13,
+                'host'     => env('REDIS_HOST', '127.0.0.1'),
+                'password' => env('REDIS_PASSWORD', 123456),
+                'port'     => env('REDIS_PORT', 6379),
+                'database' => env('REDIS_DATABASE', 0),
             ],
         ],
     ],
