@@ -80,15 +80,15 @@ class WxMock extends Command
         });
 
         // 获取监听器实例
-         $observer = $vbot->observer;
+        $observer = $vbot->observer;
 
-         // 二维码监听器
-        $observer->setQrCodeObserver(function($qrCodeUrl) use ($session){
+        // 二维码监听器
+        $observer->setQrCodeObserver(function ($qrCodeUrl) use ($session) {
 
             // 文件保存目录
             $fileDir = env('ROOT_PATH', __DIR__) . '/public/image/qrcode/';
             if (!is_dir($fileDir)) @mkdir($fileDir, 755, true);
-            $fileName = $session .'.jpg';
+            $fileName = $session . '.jpg';
 
             $qrCodeUrl = str_replace('/l/', '/qrcode/', $qrCodeUrl);
             vbot('console')->log($qrCodeUrl, '程序退出');
@@ -128,24 +128,34 @@ class WxMock extends Command
         });
 
         // 登录成功监听器
-        $observer->setLoginSuccessObserver(function(){
+        $observer->setLoginSuccessObserver(function () {
 
         });
 
         // 免扫码成功监听器
-        $observer->setReLoginSuccessObserver(function(){
+        $observer->setReLoginSuccessObserver(function () {
 
         });
 
         // 程序退出监听器
-        $observer->setExitObserver(function(){
+        $observer->setExitObserver(function () {
             vbot('console')->log('登陆失败', '程序退出');
         });
 
         // 好友监听器
-        $observer->setFetchContactObserver(function(array $contacts){
+        $observer->setFetchContactObserver(function (array $contacts) {
 //            print_r($contacts['friends']);
 //            print_r($contacts['groups']);
+        });
+
+        // 消息处理前监听器
+        $observer->setBeforeMessageObserver(function () {
+
+        });
+
+        // 异常监听器
+        $observer->setNeedActivateObserver(function () {
+            vbot('console')->log('异常监听器', '异常监听器');
         });
 
         $vbot->server->serve();
