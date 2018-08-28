@@ -16,20 +16,20 @@ class WorkServerController extends Controller
     public function __construct()
     {
         // 企业号在公众平台上设置的参数如下
-        $this->corpId = "ww8254a365bf92e5aa";
+        $this->corpId = "ww0b513d721649b0fb";
 
         // 第三方应用配置
         $this->suiteIds = [
             // 测试应用
-            'wwe6e31391320c9631' => [
-                'suite_id' => 'wwe6e31391320c9631',
-                'suite_secret' => '9JYxf4OuGvRzbFPn8h-uoyPTKJubjw4BWbnrgHtkB-0',
-                'suite_token' => 'AOCBP',
-                'suite_encoding_aes_key' => 'nXnOuYHjfhvo54fGef99qeS8HxFu25it9TxdiR6QLkj',
+            'wwe4780336c1c3912c' => [
+                'suite_id' => 'wwe4780336c1c3912c',
+                'suite_secret' => 'JsBawxl9KprAJfpNP6aKAlZLZOhULphFwiJHbUv9eD4',
+                'suite_token' => 'QDjovOd7q3h6Rf55hfDvPA',
+                'suite_encoding_aes_key' => '0AHCixgqg2I7ksN2yxd5qycU01cdiC8bb6CwBUS9Gie',
             ],
         ];
 
-        $this->suiteId = 'wwe6e31391320c9631';
+        $this->suiteId = 'wwe4780336c1c3912c';
     }
 
     /**
