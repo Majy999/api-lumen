@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Redis;
 class WorkService
 {
     private $corpId;
-    private $suiteConfigs;
     private $suiteId;
 
     public function __construct()
@@ -55,7 +54,7 @@ class WorkService
         } else {
             if (!$suiteId) throw new RequestException('请传入suite_id');
 
-            if (!isset($this->suiteConfigs[$suiteId])) throw new RequestException('请传入正确的suite_id');
+            if (!isset($this->suiteIds[$suiteId])) throw new RequestException('请传入正确的suite_id');
 
             // 获取Redis中存储的 suite_ticket
             $suiteTicket = Redis::get('suite_ticket:' . $suiteId);
@@ -63,7 +62,7 @@ class WorkService
             if (!$suiteTicket) throw new RequestException('未获取到正确的suite_ticket');
 
             // 获取配置信息
-            $suiteconfig = $this->suiteConfigs[$suiteId];
+            $suiteconfig = $this->suiteIds[$suiteId];
 
             $args = [
                 'suite_id' => $suiteconfig['suite_id'],
