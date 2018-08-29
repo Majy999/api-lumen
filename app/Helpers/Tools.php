@@ -70,8 +70,13 @@ class Tools
     }
 
     /**
-     * 单个日志输出
-     * @param string $content
+     * logInfo
+     *
+     * @author Jy马 <Majy999@outlook.com>
+     * @date xxx
+     * @param $content
+     * @param null $title
+     * @since PM_1.0_agent
      */
     public static function logInfo($content, $title = null)
     {
