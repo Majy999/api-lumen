@@ -54,7 +54,9 @@ class WorkService
             return Tools::setData($suiteAccessToken);
         } else {
             if (!$suiteId) throw new RequestException('请传入suite_id');
-
+            var_dump($this->suiteIds);
+            var_dump($suiteId);
+            die;
             if (!isset($this->suiteIds[$suiteId])) throw new RequestException('请传入正确的suite_id');
 
             // 获取Redis中存储的 suite_ticket
