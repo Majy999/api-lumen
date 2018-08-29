@@ -52,7 +52,7 @@ class WorkServerController extends Controller
         $preAuthCode = $workService->getPreAuthCode($this->suiteId);
         if ($preAuthCode['error'] == 1) return $this->response(Tools::error($suiteAccessToken['message']));
 
-        $mockTest = $workService->makeTest($this->suiteId, 0);
+        $mockTest = $workService->makeTest($this->suiteId, 1);
         Tools::logInfo($mockTest, 'makeTest');
 
         $response = [
