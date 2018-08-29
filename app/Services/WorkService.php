@@ -13,6 +13,7 @@ class WorkService
 {
     private $corpId;
     private $suiteId;
+    private $suiteIds;
 
     public function __construct()
     {
