@@ -18,20 +18,20 @@ class WorkService
     public function __construct()
     {
         // 企业号在公众平台上设置的参数如下
-        $this->corpId = "ww0b513d721649b0fb";
+        $this->corpId = "ww418163f810d0226d";
 
         // 第三方应用配置
         $this->suiteIds = [
             // 测试应用
-            'wwe4780336c1c3912c' => [
-                'suite_id' => 'wwe4780336c1c3912c',
-                'suite_secret' => 'JsBawxl9KprAJfpNP6aKAlZLZOhULphFwiJHbUv9eD4',
-                'suite_token' => 'QDjovOd7q3h6Rf55hfDvPA',
-                'suite_encoding_aes_key' => '0AHCixgqg2I7ksN2yxd5qycU01cdiC8bb6CwBUS9Gie',
+            'ww10ace0f354631c68' => [
+                'suite_id' => 'ww10ace0f354631c68',
+                'suite_secret' => 'zna_xYPTGKoCPyrXqlj8IlOsbUrQr5_tzfxR8Zm-sPk',
+                'suite_token' => 'JdIjI5Mnv0y',
+                'suite_encoding_aes_key' => '9b2Qb7CDfHjs5T9ZGQH67ux0kmaDdbAnZytbHwi2CVT',
             ],
         ];
 
-        $this->suiteId = 'wwe4780336c1c3912c';
+        $this->suiteId = 'ww10ace0f354631c68';
     }
 
     /**
@@ -53,10 +53,6 @@ class WorkService
         if ($suiteAccessToken) {
             return Tools::setData($suiteAccessToken);
         } else {
-            if (!$suiteId) throw new RequestException('请传入suite_id');
-            var_dump($this->suiteIds);
-            var_dump($suiteId);
-            die;
             if (!isset($this->suiteIds[$suiteId])) throw new RequestException('请传入正确的suite_id');
 
             // 获取Redis中存储的 suite_ticket
