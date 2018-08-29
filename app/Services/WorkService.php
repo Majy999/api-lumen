@@ -537,4 +537,38 @@ class WorkService
         return $json;
     }
 
+    public function makeTest($suiteId, $authType = 1)
+    {
+        // 获取预授权码
+        $preAuthCode = $this->getPreAuthCode($suiteId);
+        if ($preAuthCode['error'] == 1) {
+            throw new RequestException('获取预授权码失败');
+        } else {
+            $preAuthCode = $preAuthCode['data'];
+        }
+
+        // 获取第三方应用凭证
+        $suiteAccessToken = $this->getSuiteAccessToken($suiteId);
+        if ($suiteAccessToken['error'] == 1) {
+            throw new RequestException('获取第三方应用凭证失败');
+        } else {
+            $suiteAccessToken = $suiteAccessToken['data'];
+        }
+
+        if (!empty($preAuthCode) && !empty($suiteAccessToken)) {
+            $args = [
+                'pre_auth_code' => $preAuthCode,
+                'session_info' => [
+                    'auth_type' => $authType,
+                ]
+            ];
+
+            $url = HttpUtils::MakeUrl("/cgi-bin/service/set_session_info?suite_access_token=" . $suiteAccessToken);
+            $json = HttpUtils::httpPostParseToJson($url, $args);
+            return Tools::setData($json);
+        } else {
+            throw new RequestException('第三方应用凭证或预授权码为空');
+        }
+    }
+
 }
