@@ -18,18 +18,20 @@ class ReceiveController extends Controller
     public function __construct()
     {
         // 企业号在公众平台上设置的参数如下
-        $this->corpId = "ww8254a365bf92e5aa";
+        $this->corpId = "ww418163f810d0226d";
 
         // 第三方应用配置
         $this->suiteIds = [
             // 测试应用
-            'wwe6e31391320c9631' => [
-                'suite_id' => 'wwe6e31391320c9631',
-                'suite_secret' => '9JYxf4OuGvRzbFPn8h-uoyPTKJubjw4BWbnrgHtkB-0',
-                'suite_token' => 'AOCBP',
-                'suite_encoding_aes_key' => 'nXnOuYHjfhvo54fGef99qeS8HxFu25it9TxdiR6QLkj',
+            'ww10ace0f354631c68' => [
+                'suite_id' => 'ww10ace0f354631c68',
+                'suite_secret' => 'zna_xYPTGKoCPyrXqlj8IlOsbUrQr5_tzfxR8Zm-sPk',
+                'suite_token' => 'JdIjI5Mnv0y',
+                'suite_encoding_aes_key' => '9b2Qb7CDfHjs5T9ZGQH67ux0kmaDdbAnZytbHwi2CVT',
             ],
         ];
+
+        $this->suiteId = 'ww10ace0f354631c68';
     }
 
     // 数据回调URL
