@@ -96,6 +96,8 @@ class CustomerServerController extends Controller
                 // 登陆
                 if ($content == '我要登陆' || ($msgType == 'miniprogrampage' && $sessionFrom == '3')) {
 
+                    Redis::hset('wxmock', $openId);
+
                     $title = '集客';
                     $logo = 'https://img.jkweixin.com/defaults/b-image/page/icon-login-logo@2x.png';
                     $url = 'https://api.majy999.com/login-wxmock?session=' . $openId;
