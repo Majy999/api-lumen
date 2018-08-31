@@ -11,7 +11,7 @@ check_exist_process_run() {
             kill -9 $pid
         fi
          echo "data_start:$data"
-         php /data/web/api.majy999.com/artisan wxmock $data >/dev/null &
+         php /data/wwwroot/api.majy999.com/artisan wxmock $data >/dev/null &
          echo "data_end:$data"
     }
 
