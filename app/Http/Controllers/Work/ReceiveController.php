@@ -42,6 +42,8 @@ class ReceiveController extends Controller
         $nonce = request('nonce');
         $echostr = request('echostr');
 
+        Tools::logInfo(request()->all(), '接收事件');
+
         // 接入验证
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($echostr)) {
 
