@@ -56,4 +56,38 @@ class LoginController extends WxMockBaseController
             echo '上传失败';
         }
     }
+
+    public function send()
+    {
+        $imageUrl = public_path().'/image/0.png';
+        $keyword = \request('keyword');
+        $url = 'http://127.0.0.1:8866';
+        $content = [
+            'action' => 'send',
+            'params' => [
+                'type' => 'text',
+                'username' => '@@026610a43fa9f91a96877187544d6bdab48c5c223fd758204d0a21e3269b5702',
+                'content' => $keyword
+            ]
+        ];
+        $content = json_encode($content);
+        $result = Tools::curlPost($url, $content);
+        return $this->response(Tools::setData($result));
+    }
+
+    public function search()
+    {
+        $url = 'http://127.0.0.1:8866';
+        $content = [
+            'action' => 'search',
+            'params' => [
+                'type' => 'friends',
+                'method' => 'getObject',
+                'filter' => ["Jy马", "NickName", false, true],
+            ]
+        ];
+        $content = json_encode($content);
+        $result = Tools::curlPost($url, $content);
+        return $this->response(Tools::setData($result));
+    }
 }

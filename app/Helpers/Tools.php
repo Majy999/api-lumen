@@ -10,9 +10,11 @@ class Tools
      * 写入成功返回
      *
      * @author Majy999 <Majy999@outlook.com>
-     * @date 2018/6/27 15:32
+     * @date   2018/6/27 15:32
+     *
      * @param string $message
-     * @param int $code
+     * @param int    $code
+     *
      * @return array
      */
     public static function success($message = '写入成功', $code = 0)
@@ -31,9 +33,11 @@ class Tools
      * 写入成功返回
      *
      * @author Majy999 <Majy999@outlook.com>
-     * @date 2018/6/27 15:32
+     * @date   2018/6/27 15:32
+     *
      * @param array $data
-     * @param int $code
+     * @param int   $code
+     *
      * @return array
      */
     public static function setData($data = [], $code = 0)
@@ -52,9 +56,11 @@ class Tools
      * 写入失败返回
      *
      * @author Majy999 <Majy999@outlook.com>
-     * @date 2018/6/27 15:32
+     * @date   2018/6/27 15:32
+     *
      * @param string $message
-     * @param int $code
+     * @param int    $code
+     *
      * @return array
      */
     public static function error($message = '写入失败', $code = 0)
@@ -73,10 +79,12 @@ class Tools
      * logInfo
      *
      * @author Jy马 <Majy999@outlook.com>
-     * @date xxx
-     * @param $content
+     * @date   xxx
+     *
+     * @param      $content
      * @param null $title
-     * @since PM_1.0_agent
+     *
+     * @since  PM_1.0_agent
      */
     public static function logInfo($content, $title = null)
     {
@@ -90,6 +98,7 @@ class Tools
 
     /**
      * 单个错误日志输出
+     *
      * @param string $content
      */
     public static function logError($content)
@@ -103,7 +112,8 @@ class Tools
      * 事务异常错误日志输出
      *
      * @author Majy999 <Majy999@outlook.com>
-     * @date 2018/6/27 15:32
+     * @date   2018/6/27 15:32
+     *
      * @param \Exception $exception
      */
     public static function logUnusualError(\Exception $exception)
@@ -119,9 +129,11 @@ class Tools
      * 多个日志一次性输出
      *
      * @author Majy999 <Majy999@outlook.com>
-     * @date 2018/6/27 15:32
-     * @param $content
+     * @date   2018/6/27 15:32
+     *
+     * @param      $content
      * @param null $subject
+     *
      * @return bool
      */
     static public function singleLog($content, $subject = null)
@@ -141,5 +153,39 @@ class Tools
         }
 
         return true;
+    }
+
+    /**
+     * curlRequest
+     *
+     * @author Jy马 <Majy999@outlook.com>
+     * @date   2018/11/22 10:09
+     *
+     * @param        $url
+     * @param string $post
+     * @param string $cookie
+     * @param int    $returnCookie
+     *
+     * @since  PM_1.2_sibu
+     * @return bool|mixed
+     */
+    public static function curlPost($url = '', $param = '')
+    {
+        if (empty($url) || empty($param)) {
+            return false;
+        }
+
+        $postUrl = $url;
+        $curlPost = $param;
+        $ch = curl_init();//初始化curl
+        curl_setopt($ch, CURLOPT_URL, $postUrl);//抓取指定网页
+        curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+        curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
+        $data = curl_exec($ch);//运行curl
+        curl_close($ch);
+
+        return $data;
     }
 }

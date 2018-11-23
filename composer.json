@@ -12,8 +12,11 @@
         "predis/predis": "v1.1.1",
         "vlucas/phpdotenv": "~2.2",
         "overtrue/wechat": "4.0.23",
-        "guzzlehttp/guzzle": "6.3.2",
-        "hanson/vbot": "^2.0"
+        "guzzlehttp/guzzle": "^6.2",
+        "nesbot/carbon": "^1.21",
+        "symfony/console": "3.*|4.*",
+        "monolog/monolog": "^1.22",
+        "aferrandini/phpqrcode": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -24,11 +27,12 @@
         "psr-4": {
             "App\\": "app/",
             "Extend\\": "extend/",
-            "Hanson\\MyVbot\\": "./"
+            "Hanson\\Vbot\\": "packages/hanson/vbot/src/"
         },
         "files": [
             "app/Helpers/helper_functions.php",
-            "app/Helpers/HttpUtils.php"
+            "app/Helpers/HttpUtils.php",
+            "packages/hanson/vbot/src/Support/helpers.php"
         ]
     },
     "autoload-dev": {
